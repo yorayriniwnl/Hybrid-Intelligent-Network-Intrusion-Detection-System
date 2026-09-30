@@ -1,19 +1,4 @@
-# Core Data Science & ML
-numpy>=1.24.0
-pandas>=2.2.0
-scipy>=1.10.0
-scikit-learn>=1.3.0
-xgboost>=2.0.0
-joblib>=1.3.0
-
-# Deep Learning (PyTorch)
-torch>=2.0.0
-
-# Visualization & Reporting
-matplotlib>=3.7.0
-seaborn>=0.12.0
-
-# Backend & Web Serving (Phase 4)
+# Production Serverless Runtime Dependencies (Vercel & Docker Serving)
 fastapi>=0.110.0
 uvicorn[standard]>=0.28.0
 pydantic>=2.0.0
@@ -22,3 +7,9 @@ aiofiles>=23.2.1
 requests>=2.31.0
 httpx>=0.28.0
 
+# Machine Learning & Inference Engines
+numpy>=1.24.0
+pandas>=2.2.0
+scikit-learn>=1.3.0
+joblib>=1.3.0
+xgboost>=2.0.0

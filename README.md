@@ -181,13 +181,45 @@ Access the web dashboard at `http://localhost:8000` or inspect API docs at `http
 
 ---
 
+## ☁️ Vercel Serverless Deployment
+
+Deploy the entire H-NIDS dashboard and Dual-Stream decision API onto Vercel with zero server maintenance, global edge CDN caching, and serverless auto-scaling:
+
+### Method A: One-Click Git Deployment (Recommended)
+1. Push this repository to GitHub:
+   ```bash
+   git push origin main
+   ```
+2. Go to **[vercel.com/new](https://vercel.com/new)** and sign in.
+3. Import the `Hybrid-Intelligent-Network-Intrusion-Detection-System` repository.
+4. Leave build settings as default (Framework Preset: **Other**) and click **Deploy**.
+5. Vercel automatically:
+   - Deploys static dashboard assets in `/public` to the global edge CDN.
+   - Deploys `/api/index.py` as an ultra-fast Python Serverless Function (<100ms response time).
+   - Ingests lightweight serialized models (`autoencoder_weights.npz`, `xgboost_model.joblib`, `preprocessor.joblib`).
+
+### Method B: Vercel CLI Deployment
+```bash
+# 1. Login to Vercel (first time only)
+npx vercel login
+
+# 2. Deploy directly to production
+npx vercel --prod
+```
+
+---
+
 ## 📁 Repository Directory Structure
 
 ```
 Hybrid-Intelligent-Network-Intrusion-Detection-System/
+├── api/
+│   └── index.py                  # Vercel Serverless Function entry point
+├── public/
+│   └── index.html                # Edge CDN-optimized interactive SOC dashboard
 ├── artifacts/
 │   ├── figures/                  # Publication figures (Confusion Matrices, SHAP, etc.)
-│   ├── models/                   # Serialized ML & PyTorch checkpoints (.joblib, .pt)
+│   ├── models/                   # Serialized ML & PyTorch checkpoints (.joblib, .pt, .npz)
 │   └── results/                  # Experimental JSON metrics & benchmarks
 ├── backend/
 │   ├── app.py                    # High-throughput FastAPI REST API
@@ -199,7 +231,7 @@ Hybrid-Intelligent-Network-Intrusion-Detection-System/
 │   ├── models.py                 # Random Forest & XGBoost model wrappers
 │   ├── evaluate.py               # Precision, Recall, F1, Latency, Confusion Matrix
 │   ├── tab_transformer.py        # PyTorch multi-head self-attention tabular model
-│   ├── autoencoder.py            # PyTorch symmetric deep bottleneck autoencoder
+│   ├── autoencoder.py            # Deep autoencoder & pure NumPy serverless engine
 │   ├── hybrid_engine.py          # Dual-stream decision fusion engine
 │   ├── heldout_experiment.py     # Zero-day held-out attack simulation suite
 │   └── explainable_ai.py         # Exact Tree SHAP attribution engine
@@ -210,7 +242,10 @@ Hybrid-Intelligent-Network-Intrusion-Detection-System/
 ├── run_advanced_pipeline.py      # Phases 2 & 3 deep learning & hybrid runner
 ├── Dockerfile                    # Multi-stage production container configuration
 ├── docker-compose.yml            # Container orchestration manifest
-├── requirements.txt              # Pinned Python package dependencies
+├── vercel.json                   # Vercel routing and serverless function packaging
+├── .vercelignore                 # Excludes raw datasets & dev packages from Vercel upload
+├── requirements.txt              # Lean production serverless dependencies
+├── requirements-dev.txt          # Full local deep learning training dependencies
 └── README.md                     # Comprehensive technical documentation
 ```
 

@@ -6,10 +6,6 @@ FR6: SHAP Feature Attributions, Local Explanations, and Global Importance Visual
 import os
 import numpy as np
 import pandas as pd
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import seaborn as sns
 import xgboost as xgb
 from typing import Dict, Any, List
 
@@ -81,6 +77,10 @@ class NetworkExplainableAI:
 
         top_names = [self.feature_names[i] for i in top_indices][::-1]
         top_scores = mean_abs_shap[top_indices][::-1]
+
+        import matplotlib
+        matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
 
         fig, ax = plt.subplots(figsize=(10, 6))
         bars = ax.barh(top_names, top_scores, color='#e74c3c', edgecolor='black', linewidth=1.1)

@@ -1,0 +1,25 @@
+# Ignored directories
+.git/
+.venv/
+venv/
+data/
+tests/
+
+# Heavy local artifacts not needed in serverless runtime
+artifacts/figures/
+artifacts/models/tab_transformer.pt
+
+# Large dataset files
+*.csv
+*.pcap
+*.zip
+
+# Local experiment scripts
+run_pipeline.py
+run_advanced_pipeline.py
+create_notebook.py
+faculty_evaluation_prototype.ipynb
+
+# Python cache
+__pycache__/
+*.py[cod]

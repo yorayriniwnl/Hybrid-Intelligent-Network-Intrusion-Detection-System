@@ -1,0 +1,10 @@
+# Full Development & Deep Learning Training Dependencies
+-r requirements.txt
+
+# Deep Learning Framework (for local model training)
+torch>=2.0.0
+
+# Visualization & Reporting
+matplotlib>=3.7.0
+seaborn>=0.12.0
+scipy>=1.10.0

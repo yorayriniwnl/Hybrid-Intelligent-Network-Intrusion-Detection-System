@@ -8,7 +8,6 @@ import sys
 import io
 import time
 import joblib
-import torch
 import numpy as np
 import pandas as pd
 from typing import Dict, Any, List, Optional
@@ -21,8 +20,16 @@ from pydantic import BaseModel
 # Ensure src is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+try:
+    import torch
+    HAS_TORCH = True
+except ImportError:
+    HAS_TORCH = False
+
 from src.preprocessor import NetworkDataPreprocessor
-from src.autoencoder import AutoencoderTrainer, DeepAutoencoder
+from src.autoencoder import NumpyAutoencoder
+if HAS_TORCH:
+    from src.autoencoder import AutoencoderTrainer, DeepAutoencoder
 from src.hybrid_engine import HybridDecisionEngine
 from src.explainable_ai import NetworkExplainableAI
 
@@ -44,8 +51,9 @@ app.add_middleware(
 # Global model state
 MODELS = {}
 
-@app.on_event("startup")
 def load_all_models():
+    if MODELS:
+        return
     print("[*] Initializing H-NIDS API: Loading models and preprocessor artifacts...")
     models_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "artifacts", "models"))
     
@@ -66,14 +74,17 @@ def load_all_models():
     if os.path.exists(rf_path):
         MODELS["random_forest"] = joblib.load(rf_path)
 
-    # 4. Autoencoder
+    # 4. Autoencoder (prefer ultra-fast NumpyAutoencoder if weights exist)
+    ae_npz_path = os.path.join(models_dir, "autoencoder_weights.npz")
     ae_path = os.path.join(models_dir, "autoencoder.pt")
-    if os.path.exists(ae_path) and "preprocessor" in MODELS:
+    if os.path.exists(ae_npz_path):
+        MODELS["autoencoder"] = NumpyAutoencoder(ae_npz_path)
+    elif os.path.exists(ae_path) and HAS_TORCH and "preprocessor" in MODELS:
         num_features = len(MODELS["preprocessor"].feature_columns)
         ae_trainer = AutoencoderTrainer(input_dim=num_features, latent_dim=12)
         checkpoint = torch.load(ae_path, map_location="cpu")
         ae_trainer.model.load_state_dict(checkpoint["model_state_dict"])
-        ae_trainer.anomaly_threshold = checkpoint.get("anomaly_threshold", 0.05)
+        ae_trainer.anomaly_threshold = checkpoint.get("anomaly_threshold", 206885990957056.0)
         MODELS["autoencoder"] = ae_trainer
 
     # 5. Hybrid Decision Engine
@@ -93,6 +104,14 @@ def load_all_models():
 
     print(f"[+] H-NIDS API Ready! Loaded components: {list(MODELS.keys())}")
 
+def ensure_models_loaded():
+    if not MODELS:
+        load_all_models()
+
+@app.on_event("startup")
+def startup_event():
+    load_all_models()
+
 # Pydantic Schemas
 class FlowInput(BaseModel):
     features: Dict[str, float]
@@ -102,6 +121,7 @@ class PresetFlowRequest(BaseModel):
 
 @app.get("/api/health")
 def health_check():
+    ensure_models_loaded()
     return {
         "status": "online",
         "system": "Hybrid Intelligent NIDS",
@@ -112,6 +132,7 @@ def health_check():
 
 @app.get("/api/stats")
 def get_system_stats():
+    ensure_models_loaded()
     # Load evaluation metrics JSON if available
     metrics_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "artifacts", "results", "evaluation_metrics.json"))
     metrics_data = {}
@@ -157,6 +178,7 @@ def get_system_stats():
 
 @app.post("/api/predict/flow")
 def predict_single_flow(payload: FlowInput):
+    ensure_models_loaded()
     if "hybrid_engine" not in MODELS or "preprocessor" not in MODELS:
         raise HTTPException(status_code=503, detail="Models not initialized")
 
@@ -189,23 +211,26 @@ def predict_single_flow(payload: FlowInput):
 @app.post("/api/predict/preset")
 def predict_preset_scenario(req: PresetFlowRequest):
     """Generates realistic simulation flows for interactive UI demonstrations."""
+    ensure_models_loaded()
     if req.scenario.lower() == "benign":
         sample = {
-            "Destination Port": 443, "Flow Duration": 125000, "Total Fwd Packets": 10,
-            "Total Backward Packets": 12, "Fwd Packet Length Mean": 540.0, "Flow Bytes/s": 45000.0,
-            "Flow Packets/s": 176.0, "PSH Flag Count": 1
+            "Destination Port": 443, "Flow Duration": 5696503, "Total Fwd Packets": 8, "Total Backward Packets": 7,
+            "Total Length of Fwd Packets": 621.0, "Total Length of Bwd Packets": 4673.0, "Fwd Packet Length Mean": 77.6,
+            "Flow Bytes/s": 929.0, "Flow Packets/s": 2.6, "PSH Flag Count": 1, "Init_Win_bytes_forward": 8192
         }
     elif req.scenario.lower() == "portscan":
         sample = {
-            "Destination Port": 1433, "Flow Duration": 25, "Total Fwd Packets": 1,
-            "Total Backward Packets": 1, "Fwd Packet Length Mean": 0.0, "Flow Bytes/s": 160000.0,
-            "Flow Packets/s": 80000.0, "PSH Flag Count": 0
+            "Destination Port": 84, "Flow Duration": 44, "Total Fwd Packets": 1, "Total Backward Packets": 1,
+            "Total Length of Fwd Packets": 0.0, "Total Length of Bwd Packets": 6.0, "Packet Length Mean": 2.0,
+            "Fwd Packet Length Mean": 0.0, "Flow Bytes/s": 136363.6, "Flow Packets/s": 45454.5,
+            "Bwd Packets/s": 22727.27, "Flow IAT Max": 44.0, "Flow IAT Min": 44.0, "PSH Flag Count": 1,
+            "Init_Win_bytes_forward": 29200, "Init_Win_bytes_backward": 0
         }
     else:  # zero_day / novel DDoS
         sample = {
-            "Destination Port": 80, "Flow Duration": 8000000, "Total Fwd Packets": 250000,
-            "Total Backward Packets": 0, "Fwd Packet Length Mean": 2.0, "Flow Bytes/s": 95000000.0,
-            "Flow Packets/s": 31250.0, "PSH Flag Count": 0
+            "Destination Port": 80, "Flow Duration": 120000000, "Total Fwd Packets": 10000, "Total Backward Packets": 0,
+            "Idle Min": 120000000, "Idle Max": 120000000, "Idle Mean": 120000000,
+            "Flow Bytes/s": 5000000.0, "Flow Packets/s": 2000.0, "PSH Flag Count": 0
         }
 
     return predict_single_flow(FlowInput(features=sample))
@@ -252,7 +277,12 @@ async def predict_batch_csv(file: UploadFile = File(...)):
     }
 
 # Mount static frontend
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+public_dir = os.path.join(base_dir, "public")
 static_dir = os.path.join(os.path.dirname(__file__), "static")
+
+if os.path.exists(public_dir):
+    app.mount("/public", StaticFiles(directory=public_dir), name="public")
 if os.path.exists(static_dir):
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
@@ -263,11 +293,11 @@ def get_favicon():
 
 @app.get("/", response_class=HTMLResponse)
 def serve_dashboard():
-    index_file = os.path.join(static_dir, "index.html")
-    if os.path.exists(index_file):
-        with open(index_file, "r", encoding="utf-8") as f:
-            return f.read()
-    return "<h1>H-NIDS API is Running. Frontend is being prepared.</h1>"
+    for fpath in [os.path.join(public_dir, "index.html"), os.path.join(static_dir, "index.html")]:
+        if os.path.exists(fpath):
+            with open(fpath, "r", encoding="utf-8") as f:
+                return f.read()
+    return "<h1>H-NIDS API is Running.</h1>"
 
 if __name__ == "__main__":
     import uvicorn
