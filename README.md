@@ -1,6 +1,12 @@
+<div align="center">
+
+![Hybrid Intelligent NIDS Banner](artifacts/figures/banner.png)
+
 # Hybrid Intelligent Network Intrusion Detection System (H-NIDS)
 > **Phase 1 Working ML Prototype — 7th Semester Major Project**  
 > *A Hybrid Machine Learning and Deep Learning Framework for Known and Unknown Network Attack Detection with Explainable AI*
+
+</div>
 
 ---
 
