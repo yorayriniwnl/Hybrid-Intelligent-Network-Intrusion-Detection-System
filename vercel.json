@@ -3,7 +3,7 @@
   "functions": {
     "api/index.py": {
       "maxDuration": 15,
-      "includeFiles": "artifacts/**"
+      "includeFiles": "artifacts/models/*.json,artifacts/models/*.npz,artifacts/results/*.json"
     }
   },
   "rewrites": [

@@ -7,7 +7,8 @@ tests/
 
 # Heavy local artifacts not needed in serverless runtime
 artifacts/figures/
-artifacts/models/tab_transformer.pt
+artifacts/models/*.pt
+artifacts/models/*.joblib
 
 # Large dataset files
 *.csv

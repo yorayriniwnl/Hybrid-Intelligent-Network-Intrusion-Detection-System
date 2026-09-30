@@ -1,15 +1,16 @@
 """
 FastAPI Backend Application for Hybrid Intelligent Network Intrusion Detection System (H-NIDS)
 Phase 4: REST API, Live Dual-Stream Inference, CSV Batch Upload, and Dashboard Backend
+Optimized for high-performance serverless deployment on Vercel (<60MB runtime footprint).
 """
 
 import os
 import sys
 import io
+import csv
+import json
 import time
-import joblib
 import numpy as np
-import pandas as pd
 from typing import Dict, Any, List, Optional
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,18 +21,9 @@ from pydantic import BaseModel
 # Ensure src is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-try:
-    import torch
-    HAS_TORCH = True
-except ImportError:
-    HAS_TORCH = False
-
-from src.preprocessor import NetworkDataPreprocessor
+from src.serverless_engine import PureNetworkPreprocessor, PureXGBoostClassifier
 from src.autoencoder import NumpyAutoencoder
-if HAS_TORCH:
-    from src.autoencoder import AutoencoderTrainer, DeepAutoencoder
 from src.hybrid_engine import HybridDecisionEngine
-from src.explainable_ai import NetworkExplainableAI
 
 app = FastAPI(
     title="Hybrid Intelligent NIDS API",
@@ -49,7 +41,7 @@ app.add_middleware(
 )
 
 # Global model state
-MODELS = {}
+MODELS: Dict[str, Any] = {}
 
 def load_all_models():
     if MODELS:
@@ -57,35 +49,45 @@ def load_all_models():
     print("[*] Initializing H-NIDS API: Loading models and preprocessor artifacts...")
     models_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "artifacts", "models"))
     
-    # 1. Preprocessor
-    prep_path = os.path.join(models_dir, "preprocessor.joblib")
-    if os.path.exists(prep_path):
-        MODELS["preprocessor"] = NetworkDataPreprocessor.load(prep_path)
-    else:
-        print("[!] Preprocessor not found at:", prep_path)
+    # 1. Preprocessor (Pure NumPy/JSON)
+    prep_json = os.path.join(models_dir, "preprocessor.json")
+    prep_joblib = os.path.join(models_dir, "preprocessor.joblib")
+    if os.path.exists(prep_json):
+        MODELS["preprocessor"] = PureNetworkPreprocessor(prep_json)
+    elif os.path.exists(prep_joblib):
+        try:
+            from src.preprocessor import NetworkDataPreprocessor
+            MODELS["preprocessor"] = NetworkDataPreprocessor.load(prep_joblib)
+        except Exception as e:
+            print("[!] Failed to load joblib preprocessor:", e)
 
-    # 2. XGBoost Baseline
-    xgb_path = os.path.join(models_dir, "xgboost_model.joblib")
-    if os.path.exists(xgb_path):
-        MODELS["xgboost"] = joblib.load(xgb_path)
+    # 2. XGBoost Baseline (Pure GBDT / JSON)
+    xgb_json = os.path.join(models_dir, "xgboost_model.json")
+    xgb_joblib = os.path.join(models_dir, "xgboost_model.joblib")
+    classes = MODELS["preprocessor"].classes_ if "preprocessor" in MODELS else ["BENIGN", "PortScan"]
+    feat_names = MODELS["preprocessor"].feature_columns if "preprocessor" in MODELS else []
+    if os.path.exists(xgb_json):
+        MODELS["xgboost"] = PureXGBoostClassifier(xgb_json, classes, feature_names=feat_names)
+    elif os.path.exists(xgb_joblib):
+        try:
+            import joblib
+            MODELS["xgboost"] = joblib.load(xgb_joblib)
+        except Exception as e:
+            print("[!] Failed to load joblib xgboost:", e)
 
     # 3. Random Forest Baseline
-    rf_path = os.path.join(models_dir, "random_forest_model.joblib")
-    if os.path.exists(rf_path):
-        MODELS["random_forest"] = joblib.load(rf_path)
+    rf_joblib = os.path.join(models_dir, "random_forest_model.joblib")
+    if os.path.exists(rf_joblib):
+        try:
+            import joblib
+            MODELS["random_forest"] = joblib.load(rf_joblib)
+        except Exception:
+            pass
 
-    # 4. Autoencoder (prefer ultra-fast NumpyAutoencoder if weights exist)
-    ae_npz_path = os.path.join(models_dir, "autoencoder_weights.npz")
-    ae_path = os.path.join(models_dir, "autoencoder.pt")
-    if os.path.exists(ae_npz_path):
-        MODELS["autoencoder"] = NumpyAutoencoder(ae_npz_path)
-    elif os.path.exists(ae_path) and HAS_TORCH and "preprocessor" in MODELS:
-        num_features = len(MODELS["preprocessor"].feature_columns)
-        ae_trainer = AutoencoderTrainer(input_dim=num_features, latent_dim=12)
-        checkpoint = torch.load(ae_path, map_location="cpu")
-        ae_trainer.model.load_state_dict(checkpoint["model_state_dict"])
-        ae_trainer.anomaly_threshold = checkpoint.get("anomaly_threshold", 206885990957056.0)
-        MODELS["autoencoder"] = ae_trainer
+    # 4. Autoencoder (Pure NumPy Engine)
+    ae_npz = os.path.join(models_dir, "autoencoder_weights.npz")
+    if os.path.exists(ae_npz):
+        MODELS["autoencoder"] = NumpyAutoencoder(ae_npz)
 
     # 5. Hybrid Decision Engine
     if "xgboost" in MODELS and "autoencoder" in MODELS and "preprocessor" in MODELS:
@@ -95,12 +97,9 @@ def load_all_models():
             class_names=MODELS["preprocessor"].classes_
         )
 
-    # 6. Explainable AI
-    if "xgboost" in MODELS and "preprocessor" in MODELS:
-        MODELS["xai"] = NetworkExplainableAI(
-            xgb_model=MODELS["xgboost"],
-            feature_names=MODELS["preprocessor"].feature_columns
-        )
+    # 6. Explainable AI (XAI)
+    if "xgboost" in MODELS:
+        MODELS["xai"] = MODELS["xgboost"]
 
     print(f"[+] H-NIDS API Ready! Loaded components: {list(MODELS.keys())}")
 
@@ -137,8 +136,7 @@ def get_system_stats():
     metrics_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "artifacts", "results", "evaluation_metrics.json"))
     metrics_data = {}
     if os.path.exists(metrics_path):
-        import json
-        with open(metrics_path, "r") as f:
+        with open(metrics_path, "r", encoding="utf-8") as f:
             metrics_data = json.load(f)
 
     return {
@@ -186,17 +184,16 @@ def predict_single_flow(payload: FlowInput):
     hybrid_engine = MODELS["hybrid_engine"]
     xai = MODELS.get("xai")
 
-    # Convert features to single-row DataFrame
-    df_single = pd.DataFrame([payload.features])
-    X_scaled = preprocessor.transform_samples(df_single)
+    # Scaled feature vector
+    X_scaled = preprocessor.transform_samples(payload.features)
 
     # Hybrid Decision
     decision = hybrid_engine.evaluate_flow(X_scaled[0])
 
     # SHAP Explanation
     shap_explanation = {}
-    if xai:
-        shap_explanation = xai.explain_single_flow(X_scaled[0], top_k=5)
+    if xai and hasattr(xai, "explain_single_flow"):
+        shap_explanation = xai.explain_single_flow(X_scaled[0], preprocessor.feature_columns, top_k=5)
 
     return {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -238,6 +235,7 @@ def predict_preset_scenario(req: PresetFlowRequest):
 @app.post("/api/predict/batch")
 async def predict_batch_csv(file: UploadFile = File(...)):
     """Accepts uploaded network flow CSV file and runs full Hybrid batch detection."""
+    ensure_models_loaded()
     if "hybrid_engine" not in MODELS or "preprocessor" not in MODELS:
         raise HTTPException(status_code=503, detail="Models not initialized")
 
@@ -246,18 +244,28 @@ async def predict_batch_csv(file: UploadFile = File(...)):
 
     contents = await file.read()
     try:
-        df_uploaded = pd.read_csv(io.BytesIO(contents))
+        text_stream = io.StringIO(contents.decode("utf-8", errors="ignore"))
+        reader = csv.DictReader(text_stream)
+        rows: List[Dict[str, Any]] = []
+        for i, row in enumerate(reader):
+            if i >= 1000:
+                break
+            clean_row = {}
+            for k, v in row.items():
+                if k:
+                    k_clean = k.strip()
+                    try:
+                        clean_row[k_clean] = float(v)
+                    except (ValueError, TypeError):
+                        clean_row[k_clean] = v
+            rows.append(clean_row)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid CSV file: {str(e)}")
 
-    # Sample if too large for real-time web response
-    max_batch = 1000
-    if len(df_uploaded) > max_batch:
-        df_eval = df_uploaded.sample(max_batch, random_state=42).reset_index(drop=True)
-    else:
-        df_eval = df_uploaded.reset_index(drop=True)
+    if not rows:
+        raise HTTPException(status_code=400, detail="CSV file contains no valid data rows.")
 
-    X_scaled = preprocessor.transform_samples(df_eval)
+    X_scaled = preprocessor.transform_samples(rows)
     decisions = hybrid_engine.evaluate_batch(X_scaled)
 
     normal_count = sum(1 for d in decisions if d["final_verdict"] == "Normal")
@@ -266,12 +274,12 @@ async def predict_batch_csv(file: UploadFile = File(...)):
 
     return {
         "filename": file.filename,
-        "total_flows_processed": len(df_eval),
+        "total_flows_processed": len(rows),
         "summary": {
             "normal_flows": normal_count,
             "known_attacks": known_attack_count,
             "suspicious_zero_day_flows": suspicious_count,
-            "threat_ratio_percent": round((known_attack_count + suspicious_count) / len(df_eval) * 100, 2)
+            "threat_ratio_percent": round((known_attack_count + suspicious_count) / len(rows) * 100, 2)
         },
         "sample_flagged_alerts": [d for d in decisions if d["final_verdict"] != "Normal"][:10]
     }
