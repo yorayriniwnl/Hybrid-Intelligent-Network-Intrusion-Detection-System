@@ -15,7 +15,7 @@ from typing import Dict, Any, List, Optional
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 from pydantic import BaseModel
 
 # Ensure src is on sys.path
@@ -255,6 +255,11 @@ async def predict_batch_csv(file: UploadFile = File(...)):
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 if os.path.exists(static_dir):
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+@app.get("/favicon.ico", include_in_schema=False)
+def get_favicon():
+    svg_icon = """<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>"""
+    return Response(content=svg_icon, media_type="image/svg+xml")
 
 @app.get("/", response_class=HTMLResponse)
 def serve_dashboard():
