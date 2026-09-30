@@ -1,0 +1,146 @@
+[
+  {
+    "sample_id": 1,
+    "true_label": "BENIGN",
+    "rf_predicted": "BENIGN",
+    "rf_confidence": 1.0,
+    "rf_correct": true,
+    "xgb_predicted": "BENIGN",
+    "xgb_confidence": 0.9999,
+    "xgb_correct": true,
+    "key_flow_features": {
+      "Destination Port": 514.0,
+      "Flow Duration": 29.0,
+      "Total Fwd Packets": 1.0,
+      "Total Backward Packets": 1.0,
+      "Fwd Packet Length Mean": 2.0,
+      "Flow Bytes/s": 275862.07
+    }
+  },
+  {
+    "sample_id": 2,
+    "true_label": "PortScan",
+    "rf_predicted": "PortScan",
+    "rf_confidence": 1.0,
+    "rf_correct": true,
+    "xgb_predicted": "PortScan",
+    "xgb_confidence": 1.0,
+    "xgb_correct": true,
+    "key_flow_features": {
+      "Destination Port": 2041.0,
+      "Flow Duration": 23.0,
+      "Total Fwd Packets": 1.0,
+      "Total Backward Packets": 1.0,
+      "Fwd Packet Length Mean": 2.0,
+      "Flow Bytes/s": 347826.09
+    }
+  },
+  {
+    "sample_id": 3,
+    "true_label": "PortScan",
+    "rf_predicted": "PortScan",
+    "rf_confidence": 1.0,
+    "rf_correct": true,
+    "xgb_predicted": "PortScan",
+    "xgb_confidence": 1.0,
+    "xgb_correct": true,
+    "key_flow_features": {
+      "Destination Port": 425.0,
+      "Flow Duration": 54.0,
+      "Total Fwd Packets": 1.0,
+      "Total Backward Packets": 1.0,
+      "Fwd Packet Length Mean": 2.0,
+      "Flow Bytes/s": 148148.15
+    }
+  },
+  {
+    "sample_id": 4,
+    "true_label": "PortScan",
+    "rf_predicted": "PortScan",
+    "rf_confidence": 1.0,
+    "rf_correct": true,
+    "xgb_predicted": "PortScan",
+    "xgb_confidence": 1.0,
+    "xgb_correct": true,
+    "key_flow_features": {
+      "Destination Port": 514.0,
+      "Flow Duration": 61.0,
+      "Total Fwd Packets": 1.0,
+      "Total Backward Packets": 1.0,
+      "Fwd Packet Length Mean": 0.0,
+      "Flow Bytes/s": 98360.66
+    }
+  },
+  {
+    "sample_id": 5,
+    "true_label": "PortScan",
+    "rf_predicted": "PortScan",
+    "rf_confidence": 1.0,
+    "rf_correct": true,
+    "xgb_predicted": "PortScan",
+    "xgb_confidence": 1.0,
+    "xgb_correct": true,
+    "key_flow_features": {
+      "Destination Port": 3800.0,
+      "Flow Duration": 78.0,
+      "Total Fwd Packets": 1.0,
+      "Total Backward Packets": 1.0,
+      "Fwd Packet Length Mean": 2.0,
+      "Flow Bytes/s": 102564.1
+    }
+  },
+  {
+    "sample_id": 6,
+    "true_label": "BENIGN",
+    "rf_predicted": "BENIGN",
+    "rf_confidence": 1.0,
+    "rf_correct": true,
+    "xgb_predicted": "BENIGN",
+    "xgb_confidence": 0.9999,
+    "xgb_correct": true,
+    "key_flow_features": {
+      "Destination Port": 49.0,
+      "Flow Duration": 64.0,
+      "Total Fwd Packets": 1.0,
+      "Total Backward Packets": 1.0,
+      "Fwd Packet Length Mean": 2.0,
+      "Flow Bytes/s": 125000.0
+    }
+  },
+  {
+    "sample_id": 7,
+    "true_label": "BENIGN",
+    "rf_predicted": "BENIGN",
+    "rf_confidence": 1.0,
+    "rf_correct": true,
+    "xgb_predicted": "BENIGN",
+    "xgb_confidence": 0.9999,
+    "xgb_correct": true,
+    "key_flow_features": {
+      "Destination Port": 497.0,
+      "Flow Duration": 17.0,
+      "Total Fwd Packets": 1.0,
+      "Total Backward Packets": 1.0,
+      "Fwd Packet Length Mean": 0.0,
+      "Flow Bytes/s": 352941.18
+    }
+  },
+  {
+    "sample_id": 8,
+    "true_label": "BENIGN",
+    "rf_predicted": "BENIGN",
+    "rf_confidence": 1.0,
+    "rf_correct": true,
+    "xgb_predicted": "BENIGN",
+    "xgb_confidence": 0.9999,
+    "xgb_correct": true,
+    "key_flow_features": {
+      "Destination Port": 497.0,
+      "Flow Duration": 48.0,
+      "Total Fwd Packets": 1.0,
+      "Total Backward Packets": 1.0,
+      "Fwd Packet Length Mean": 0.0,
+      "Flow Bytes/s": 125000.0
+    }
+  }
+]

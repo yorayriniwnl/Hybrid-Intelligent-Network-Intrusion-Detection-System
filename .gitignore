@@ -1,0 +1,26 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Large Dataset Files (CIC-IDS2017 raw CSVs > 50MB)
+data/*.csv
+data/*.pcap
+*.csv.zip
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE configuration
+.vscode/
+.idea/
