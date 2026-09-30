@@ -1,0 +1,141 @@
+{
+  "tab_transformer_evaluation": {
+    "model_name": "TabTransformer",
+    "test_samples": 10833,
+    "training_time_seconds": 205.798,
+    "inference_time_seconds": 1.9232,
+    "latency_microseconds_per_flow": 177.53,
+    "throughput_flows_per_sec": 5632.8,
+    "accuracy": 0.99945,
+    "precision_macro": 0.99943,
+    "recall_macro": 0.99946,
+    "f1_score_macro": 0.99945,
+    "precision_weighted": 0.99945,
+    "recall_weighted": 0.99945,
+    "f1_score_weighted": 0.99945,
+    "false_positive_rate": 0.00019,
+    "false_negative_rate": 0.0009,
+    "roc_auc": 0.99981,
+    "confusion_matrix": [
+      [
+        5255,
+        1
+      ],
+      [
+        5,
+        5572
+      ]
+    ],
+    "classification_report": {
+      "BENIGN": {
+        "precision": 0.9990494296577946,
+        "recall": 0.9998097412480974,
+        "f1-score": 0.999429440852035,
+        "support": 5256.0
+      },
+      "PortScan": {
+        "precision": 0.9998205634308271,
+        "recall": 0.9991034606419221,
+        "f1-score": 0.9994618834080717,
+        "support": 5577.0
+      },
+      "accuracy": 0.9994461368042094,
+      "macro avg": {
+        "precision": 0.9994349965443109,
+        "recall": 0.9994566009450098,
+        "f1-score": 0.9994456621300534,
+        "support": 10833.0
+      },
+      "weighted avg": {
+        "precision": 0.9994464215392866,
+        "recall": 0.9994461368042094,
+        "f1-score": 0.9994461427937887,
+        "support": 10833.0
+      }
+    }
+  },
+  "autoencoder_stats": {
+    "mean_val_error": 11325557178368.0,
+    "std_val_error": 51060186021888.0,
+    "anomaly_threshold": 206885990957056.0,
+    "threshold_percentile": 98.5,
+    "training_time": 1.88
+  },
+  "heldout_attack_experiment": {
+    "held_out_attack": "DDoS",
+    "evaluated_samples": 1000,
+    "anomaly_threshold": 206885990957056.0,
+    "average_recon_error": 40987913093120.0,
+    "autoencoder_detection_rate": 10.0,
+    "supervised_forced_benign_ratio": 42.3,
+    "hybrid_threat_detection_rate": 71.1,
+    "research_conclusion": "Confirms that combining supervised classification with Autoencoder anomaly detection successfully intercepts held-out attacks that supervised models fail to identify."
+  },
+  "sample_shap_explanation": {
+    "base_value": -0.0872,
+    "top_attack_indicators": [
+      {
+        "feature": "Total Length of Fwd Packets",
+        "shap_value": 6.2649,
+        "feature_value": -0.0303
+      },
+      {
+        "feature": "Flow Bytes/s",
+        "shap_value": 1.2409,
+        "feature_value": 2.5555
+      },
+      {
+        "feature": "PSH Flag Count",
+        "shap_value": 0.5208,
+        "feature_value": 0.0
+      },
+      {
+        "feature": "Packet Length Mean",
+        "shap_value": 0.4899,
+        "feature_value": -0.0235
+      },
+      {
+        "feature": "Bwd Packets/s",
+        "shap_value": 0.3487,
+        "feature_value": 4.0081
+      },
+      {
+        "feature": "Fwd Packet Length Mean",
+        "shap_value": 0.3151,
+        "feature_value": -0.0541
+      }
+    ],
+    "top_benign_indicators": [
+      {
+        "feature": "Flow IAT Min",
+        "shap_value": -0.1873,
+        "feature_value": -0.5484
+      },
+      {
+        "feature": "Fwd Packet Length Min",
+        "shap_value": -0.0984,
+        "feature_value": -0.3333
+      },
+      {
+        "feature": "Bwd IAT Min",
+        "shap_value": -0.0874,
+        "feature_value": 0.0
+      },
+      {
+        "feature": "Min Packet Length",
+        "shap_value": -0.0591,
+        "feature_value": -0.3333
+      },
+      {
+        "feature": "Fwd Header Length",
+        "shap_value": -0.0536,
+        "feature_value": 0.0
+      },
+      {
+        "feature": "Flow IAT Std",
+        "shap_value": -0.0474,
+        "feature_value": 0.0
+      }
+    ]
+  }
+}

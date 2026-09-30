@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  hnids-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hnids_enterprise_engine
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PORT=8000
+    volumes:
+      - ./artifacts/models:/app/artifacts/models:ro
+      - ./artifacts/results:/app/artifacts/results:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
