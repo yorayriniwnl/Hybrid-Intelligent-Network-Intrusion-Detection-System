@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>H-NIDS — Autonomous Hybrid Intrusion Detection & Threat Intelligence</title>
+  <title>H-NIDS — Hybrid Intelligent Intrusion Detection System</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
   
-  <!-- Modern Typography -->
+  <!-- Modern Font Stack: Plus Jakarta Sans, Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Tailwind CSS & Icons -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <script>
     tailwind.config = {
@@ -23,35 +24,29 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace']
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            obsidian: '#090a0f',
-            surface: {
-              50: '#151722',
-              100: '#11131c',
-              200: '#0d0e16',
-              border: 'rgba(255, 255, 255, 0.08)',
-              hover: 'rgba(255, 255, 255, 0.03)'
+            space: {
+              950: '#030712',
+              900: '#060a17',
+              850: '#0a0f24',
+              800: '#0f172a',
+              700: '#1e293b',
             },
-            accent: {
-              ruby: '#ff2b58',
-              rubyGlow: 'rgba(255, 43, 88, 0.35)',
-              emerald: '#00e599',
-              emeraldGlow: 'rgba(0, 229, 153, 0.35)',
-              cyan: '#00d2ff',
-              cyanGlow: 'rgba(0, 210, 255, 0.35)',
-              amber: '#ffb300',
-              amberGlow: 'rgba(255, 179, 0, 0.35)',
-              violet: '#8a5cf6'
+            brand: {
+              indigo: '#6366f1',
+              violet: '#8b5cf6',
+              cyan: '#06b6d4',
+              emerald: '#10b981',
+              rose: '#f43f5e',
+              amber: '#f59e0b',
             }
           },
-          boxShadow: {
-            'glow-ruby': '0 0 30px -5px rgba(255, 43, 88, 0.3)',
-            'glow-emerald': '0 0 30px -5px rgba(0, 229, 153, 0.3)',
-            'glow-cyan': '0 0 30px -5px rgba(0, 210, 255, 0.3)',
-            'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'radar': 'radarSweep 4s linear infinite',
           }
         }
       }
@@ -59,595 +54,843 @@
   </script>
 
   <style>
-    /* Custom Luxury Glass & Glow Styles */
-    body {
-      background-color: #090a0f;
-      color: #e2e8f0;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(138, 92, 246, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 20%, rgba(0, 210, 255, 0.07) 0%, transparent 45%),
-        radial-gradient(circle at 50% 80%, rgba(255, 43, 88, 0.06) 0%, transparent 50%),
-        radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px;
+    /* ============================================================
+       CandidateX-Inspired Deep Space Glassmorphism Design System
+       ============================================================ */
+    :root {
+      color-scheme: dark;
+      --bg-primary: #030712;
+      --bg-elevated: #080d1e;
+      --bg-surface: rgba(255, 255, 255, 0.025);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.4);
+      --glow-indigo: rgba(99, 102, 241, 0.15);
+      --glow-cyan: rgba(6, 182, 212, 0.15);
+      --glow-emerald: rgba(16, 185, 129, 0.15);
+      --glow-rose: rgba(244, 63, 94, 0.15);
     }
 
+    body {
+      background-color: var(--bg-primary);
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Ambient Atmosphere Background Gradients */
+    .atmosphere-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        radial-gradient(1200px circle at 50% -10%, rgba(99, 102, 241, 0.14), transparent 50%),
+        radial-gradient(900px circle at 90% 25%, rgba(139, 92, 246, 0.09), transparent 45%),
+        radial-gradient(800px circle at 10% 75%, rgba(6, 182, 212, 0.08), transparent 40%),
+        radial-gradient(600px circle at 70% 90%, rgba(16, 185, 129, 0.05), transparent 40%);
+    }
+
+    /* Subtle Grid Overlay */
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 80%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 80%);
+    }
+
+    /* Glass Components */
     .glass-panel {
-      background: linear-gradient(180deg, rgba(21, 23, 34, 0.75) 0%, rgba(13, 14, 22, 0.85) 100%);
+      background: rgba(10, 15, 30, 0.65);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 1rem;
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card {
+      background: rgba(15, 23, 42, 0.55);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06), 0 8px 24px -4px rgba(0, 0, 0, 0.4);
-    }
-
-    .glass-panel-interactive {
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.875rem;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .glass-panel-interactive:hover {
-      border-color: rgba(255, 255, 255, 0.18);
+
+    .glass-card:hover {
+      background: rgba(20, 30, 55, 0.65);
+      border-color: var(--border-hover);
       transform: translateY(-2px);
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 16px 36px -8px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 25px rgba(99, 102, 241, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
+    .glass-card-active {
+      background: rgba(26, 38, 70, 0.75) !important;
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    }
+
+    /* Glow Badges */
+    .glow-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.25rem 0.625rem;
+      border-radius: 9999px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+    }
+
+    .glow-badge-emerald {
+      background: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.15);
+    }
+
+    .glow-badge-rose {
+      background: rgba(244, 63, 94, 0.1);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.15);
+    }
+
+    .glow-badge-amber {
+      background: rgba(245, 158, 11, 0.1);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.15);
+    }
+
+    .glow-badge-indigo {
+      background: rgba(99, 102, 241, 0.1);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.15);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.2); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.35); }
+
+    /* Text Gradient */
     .text-gradient {
       background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .text-gradient-ruby {
-      background: linear-gradient(135deg, #ff4d79 0%, #ff2b58 100%);
+    .text-gradient-brand {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .text-gradient-cyan {
-      background: linear-gradient(135deg, #5ce1e6 0%, #00d2ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .pulsing-dot {
-      box-shadow: 0 0 12px #00e599;
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.25); }
-
-    /* Telemetry ticker animation */
-    @keyframes scanline {
-      0% { transform: translateY(-100%); }
-      100% { transform: translateY(1000%); }
-    }
-    .scan-line {
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.4), transparent);
-      animation: scanline 8s linear infinite;
+    /* Pulse animation */
+    @keyframes radarSweep {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-accent-ruby/20 selection:text-white">
+<body class="min-h-screen relative flex flex-col selection:bg-brand-indigo/30 selection:text-white">
 
-  <!-- Top Announcement / Telemetry Ribbon -->
-  <div class="border-b border-surface-border bg-surface-200/60 backdrop-blur-md px-6 py-1.5 flex items-center justify-between text-[11px] font-mono text-gray-400">
-    <div class="flex items-center space-x-4">
-      <div class="flex items-center space-x-2">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-emerald opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-accent-emerald pulsing-dot"></span>
-        </span>
-        <span class="text-gray-200 font-semibold tracking-wide">SYSTEM OPERATIONAL</span>
-      </div>
-      <span class="text-gray-600">|</span>
-      <span>MODEL: DUAL-STREAM HYBRID (XGBOOST + AUTOENCODER)</span>
-      <span class="text-gray-600 hidden md:inline">|</span>
-      <span class="hidden md:inline text-accent-cyan">LATENCY: 0.40 µs (2.5M FLOWS/SEC)</span>
-    </div>
-    <div class="flex items-center space-x-3">
-      <span id="liveClock" class="text-gray-400">UTC 00:00:00</span>
-      <div class="flex items-center space-x-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-300">
-        <i class="fa-solid fa-cloud text-accent-cyan text-[10px]"></i>
-        <span>Vercel Edge Ready</span>
-      </div>
-    </div>
-  </div>
+  <!-- Atmosphere Gradients & Grid Background -->
+  <div class="atmosphere-bg"></div>
+  <div class="grid-overlay"></div>
 
-  <!-- Primary Navigation Bar -->
-  <header class="border-b border-surface-border bg-surface-100/70 backdrop-blur-xl sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
-    <div class="flex items-center space-x-4">
-      <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-accent-ruby/20 to-purple-600/10 border border-accent-ruby/40 flex items-center justify-center text-accent-ruby text-lg shadow-glow-ruby">
-        <i class="fa-solid fa-shield-virus"></i>
-      </div>
-      <div>
-        <div class="flex items-center space-x-2.5">
-          <h1 class="text-lg font-extrabold tracking-tight text-white flex items-center gap-1.5">
-            CANDIDATE<span class="text-accent-ruby">X</span> <span class="text-gray-500 font-medium text-xs px-2 py-0.5 rounded-full bg-white/5 border border-white/10 ml-1">NIDS v2.0</span>
-          </h1>
-        </div>
-        <p class="text-xs text-gray-400 font-medium">Enterprise Dual-Stream Cyber Defense & Anomaly Intelligence</p>
-      </div>
-    </div>
+  <!-- Content Wrapper -->
+  <div class="relative z-10 flex flex-col min-h-screen">
 
-    <!-- Center Navigation Tabs -->
-    <nav class="hidden lg:flex items-center space-x-1 p-1 bg-surface-200/80 rounded-xl border border-surface-border text-xs font-medium text-gray-400">
-      <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="px-3.5 py-1.5 rounded-lg text-white bg-white/10 font-semibold transition">
-        <i class="fa-solid fa-gauge-high mr-1.5 text-accent-cyan"></i> Live Operations
-      </button>
-      <button onclick="switchTab('analytics')" id="tabBtn-analytics" class="px-3.5 py-1.5 rounded-lg hover:text-white transition">
-        <i class="fa-solid fa-chart-pie mr-1.5 text-accent-violet"></i> Benchmarks
-      </button>
-      <button onclick="switchTab('telemetry')" id="tabBtn-telemetry" class="px-3.5 py-1.5 rounded-lg hover:text-white transition">
-        <i class="fa-solid fa-terminal mr-1.5 text-accent-emerald"></i> Live Logs
-      </button>
-    </nav>
-
-    <!-- Header Actions -->
-    <div class="flex items-center space-x-3">
-      <button onclick="openCustomInspectorModal()" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-gray-200 bg-white/5 hover:bg-white/10 border border-surface-border hover:border-white/20 transition flex items-center gap-2">
-        <i class="fa-solid fa-sliders text-accent-cyan"></i>
-        <span>Custom Flow Tuning</span>
-      </button>
-      <button onclick="runScenario('benign')" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-ruby to-rose-600 hover:from-rose-500 hover:to-accent-ruby border border-accent-ruby/40 shadow-glow-ruby transition flex items-center gap-2">
-        <i class="fa-solid fa-bolt"></i>
-        <span>Trigger Live Probe</span>
-      </button>
-    </div>
-  </header>
-
-  <!-- Main Viewport -->
-  <main class="flex-1 max-w-7xl mx-auto w-full p-6 space-y-6">
-
-    <!-- KPI Metric Bento Grid -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-      
-      <!-- Card 1 -->
-      <div class="glass-panel glass-panel-interactive p-4 rounded-2xl relative overflow-hidden group">
-        <div class="flex items-center justify-between text-gray-400 mb-2">
-          <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Total Analyzed</span>
-          <div class="h-7 w-7 rounded-lg bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center text-accent-cyan text-xs">
-            <i class="fa-solid fa-network-wired"></i>
-          </div>
-        </div>
-        <div class="text-2xl font-extrabold text-white tracking-tight font-mono" id="stat-total">100,000</div>
-        <div class="text-[11px] text-gray-400 mt-1 flex items-center gap-1.5">
-          <span class="text-accent-emerald font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> 100%</span>
-          <span>CIC-IDS2017 Dataset</span>
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="glass-panel glass-panel-interactive p-4 rounded-2xl relative overflow-hidden group">
-        <div class="flex items-center justify-between text-gray-400 mb-2">
-          <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Normal Flow Verified</span>
-          <div class="h-7 w-7 rounded-lg bg-accent-emerald/10 border border-accent-emerald/20 flex items-center justify-center text-accent-emerald text-xs">
-            <i class="fa-solid fa-shield-check"></i>
-          </div>
-        </div>
-        <div class="text-2xl font-extrabold text-accent-emerald tracking-tight font-mono" id="stat-normal">44,520</div>
-        <div class="text-[11px] text-gray-400 mt-1 flex items-center gap-1.5">
-          <span class="text-accent-emerald font-mono font-semibold">0.00%</span>
-          <span>False Positive Rate</span>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="glass-panel glass-panel-interactive p-4 rounded-2xl relative overflow-hidden group">
-        <div class="flex items-center justify-between text-gray-400 mb-2">
-          <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Known Attacks Intercepted</span>
-          <div class="h-7 w-7 rounded-lg bg-accent-ruby/10 border border-accent-ruby/20 flex items-center justify-center text-accent-ruby text-xs">
-            <i class="fa-solid fa-skull"></i>
-          </div>
-        </div>
-        <div class="text-2xl font-extrabold text-accent-ruby tracking-tight font-mono" id="stat-attacks">55,480</div>
-        <div class="text-[11px] text-gray-400 mt-1 flex items-center gap-1.5">
-          <span class="text-accent-ruby font-semibold">99.994%</span>
-          <span>XGBoost Signature F1</span>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="glass-panel glass-panel-interactive p-4 rounded-2xl relative overflow-hidden group">
-        <div class="flex items-center justify-between text-gray-400 mb-2">
-          <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Zero-Day Interception</span>
-          <div class="h-7 w-7 rounded-lg bg-accent-amber/10 border border-accent-amber/20 flex items-center justify-center text-accent-amber text-xs">
-            <i class="fa-solid fa-radiation"></i>
-          </div>
-        </div>
-        <div class="text-2xl font-extrabold text-accent-amber tracking-tight font-mono" id="stat-anomalies">71.1%</div>
-        <div class="text-[11px] text-gray-400 mt-1 flex items-center gap-1.5">
-          <span class="text-accent-amber font-semibold">Autoencoder Spike</span>
-          <span>Held-Out DDoS</span>
-        </div>
-      </div>
-
-      <!-- Card 5 -->
-      <div class="glass-panel glass-panel-interactive p-4 rounded-2xl relative overflow-hidden group">
-        <div class="flex items-center justify-between text-gray-400 mb-2">
-          <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Inference Latency</span>
-          <div class="h-7 w-7 rounded-lg bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center text-accent-cyan text-xs">
-            <i class="fa-solid fa-bolt"></i>
-          </div>
-        </div>
-        <div class="text-2xl font-extrabold text-white tracking-tight font-mono" id="stat-latency">0.40 µs</div>
-        <div class="text-[11px] text-gray-400 mt-1 flex items-center gap-1.5">
-          <span class="text-accent-cyan font-semibold">2,517,295</span>
-          <span>Flows / Second</span>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- Interactive Workspace (3-Column Layout) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-      <!-- Column 1: Scenarios & Injection (4 cols) -->
-      <div class="lg:col-span-4 space-y-4">
+    <!-- ============================================================
+         Header Platform Navigation
+         ============================================================ -->
+    <header class="sticky top-0 z-50 border-b border-white/[0.07] bg-space-950/80 backdrop-blur-2xl transition-all">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between gap-4">
         
-        <!-- Scenario Selector Card -->
-        <div class="glass-panel p-5 rounded-2xl space-y-4">
-          <div class="flex items-center justify-between border-b border-surface-border pb-3">
-            <div>
-              <h2 class="text-sm font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-circle-play text-accent-ruby"></i> Traffic Injection Console
-              </h2>
-              <p class="text-xs text-gray-400 mt-0.5">Select a simulated packet flow to inject into the pipeline.</p>
-            </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-400 border border-white/10">3 Presets</span>
+        <!-- Brand Mark & Identity -->
+        <div class="flex items-center space-x-3.5">
+          <div class="relative flex items-center justify-center h-10 w-10 rounded-xl bg-gradient-to-tr from-brand-indigo/25 via-brand-violet/20 to-brand-cyan/20 border border-white/10 shadow-lg shadow-brand-indigo/10 group cursor-pointer">
+            <i class="fa-solid fa-shield-halved text-brand-cyan text-lg transition group-hover:scale-110"></i>
+            <span class="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-emerald opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-emerald"></span>
+            </span>
           </div>
-
-          <!-- Scenario Buttons -->
-          <div class="space-y-2.5">
-            <!-- Scenario 1 -->
-            <button onclick="runScenario('benign')" class="w-full text-left p-3.5 rounded-xl border border-surface-border bg-surface-200/50 hover:bg-surface-50 hover:border-accent-emerald/40 transition group relative overflow-hidden">
-              <div class="flex items-start justify-between">
-                <div>
-                  <div class="flex items-center gap-2">
-                    <span class="h-2 w-2 rounded-full bg-accent-emerald"></span>
-                    <span class="text-xs font-bold text-gray-200 group-hover:text-white transition">Legitimate HTTPS Session</span>
-                  </div>
-                  <p class="text-[11px] text-gray-400 mt-1">Port 443 • High Duration • Clean Payload</p>
-                </div>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-accent-emerald border border-accent-emerald/20">BENIGN</span>
-              </div>
-            </button>
-
-            <!-- Scenario 2 -->
-            <button onclick="runScenario('portscan')" class="w-full text-left p-3.5 rounded-xl border border-surface-border bg-surface-200/50 hover:bg-surface-50 hover:border-accent-ruby/40 transition group relative overflow-hidden">
-              <div class="flex items-start justify-between">
-                <div>
-                  <div class="flex items-center gap-2">
-                    <span class="h-2 w-2 rounded-full bg-accent-ruby"></span>
-                    <span class="text-xs font-bold text-gray-200 group-hover:text-white transition">PortScan Reconnaissance</span>
-                  </div>
-                  <p class="text-[11px] text-gray-400 mt-1">Port 84 • 44 µs Burst • 0 Payload Bytes</p>
-                </div>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/10 text-accent-ruby border border-accent-ruby/20">KNOWN ATTACK</span>
-              </div>
-            </button>
-
-            <!-- Scenario 3 -->
-            <button onclick="runScenario('zero_day')" class="w-full text-left p-3.5 rounded-xl border border-surface-border bg-surface-200/50 hover:bg-surface-50 hover:border-accent-amber/40 transition group relative overflow-hidden">
-              <div class="flex items-start justify-between">
-                <div>
-                  <div class="flex items-center gap-2">
-                    <span class="h-2 w-2 rounded-full bg-accent-amber"></span>
-                    <span class="text-xs font-bold text-gray-200 group-hover:text-white transition">Novel Zero-Day Threat</span>
-                  </div>
-                  <p class="text-[11px] text-gray-400 mt-1">Held-Out Category • Abnormal Reconstruction Spike</p>
-                </div>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-accent-amber border border-accent-amber/20">ZERO-DAY</span>
-              </div>
-            </button>
-          </div>
-
-          <!-- Drag and Drop CSV Zone -->
-          <div class="pt-3 border-t border-surface-border">
-            <div class="border border-dashed border-surface-border hover:border-accent-cyan/50 rounded-xl p-4 text-center cursor-pointer bg-surface-200/40 hover:bg-surface-50 transition" onclick="document.getElementById('csvInput').click()">
-              <div class="h-9 w-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-accent-cyan mx-auto mb-2">
-                <i class="fa-solid fa-file-arrow-up text-sm"></i>
-              </div>
-              <p class="text-xs font-semibold text-gray-200" id="uploadStatusText">Upload Network Flow CSV</p>
-              <p class="text-[11px] text-gray-500 mt-0.5">Supports CIC-IDS2017 & custom PCAP dumps</p>
-              <input type="file" id="csvInput" accept=".csv" class="hidden" onchange="uploadCSV(this)">
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick System Status Card -->
-        <div class="glass-panel p-4 rounded-2xl text-xs space-y-2.5 font-mono">
-          <div class="flex items-center justify-between text-gray-400">
-            <span>PIPELINE ENGINE</span>
-            <span class="text-accent-emerald font-semibold">DUAL-STREAM ONLINE</span>
-          </div>
-          <div class="flex items-center justify-between text-gray-400">
-            <span>SUPERVISED CLASSIFIER</span>
-            <span class="text-gray-200 font-semibold">XGBOOST (100 TREES)</span>
-          </div>
-          <div class="flex items-center justify-between text-gray-400">
-            <span>ANOMALY RECONSTRUCTION</span>
-            <span class="text-gray-200 font-semibold">DEEP AUTOENCODER</span>
-          </div>
-          <div class="flex items-center justify-between text-gray-400">
-            <span>EXPLAINABLE AI</span>
-            <span class="text-gray-200 font-semibold">EXACT TREE-SHAP</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Column 2: Dual-Stream Verdict & Threat Radar (4 cols) -->
-      <div class="lg:col-span-4 space-y-4">
-        <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between h-full relative overflow-hidden">
-          
           <div>
-            <!-- Verdict Header -->
-            <div class="flex items-center justify-between border-b border-surface-border pb-3">
-              <h2 class="text-sm font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-crosshairs text-accent-cyan"></i> Decision Fusion Engine
-              </h2>
-              <span id="verdictBadge" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded-full bg-white/5 text-gray-400 border border-white/10">STANDBY</span>
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-base tracking-tight text-white font-sans">HYBRID INTELLIGENT</span>
+              <span class="text-gradient-brand font-black text-base tracking-wider font-mono">NIDS</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-brand-indigo/15 text-brand-indigo border border-brand-indigo/30 hidden sm:inline-block">v2.0 PRO</span>
             </div>
-
-            <!-- Hero Verdict Display -->
-            <div class="py-6 text-center">
-              <div class="text-[11px] font-mono uppercase tracking-wider text-gray-400 mb-1">CONCORDANT VERDICT</div>
-              <div id="verdictText" class="text-2xl font-extrabold text-white tracking-tight">Ready for Flow Evaluation</div>
-              <p id="rationaleText" class="text-xs text-gray-400 mt-2 font-medium px-4">Click a preset scenario or tune parameters to trigger multi-model inference.</p>
-            </div>
-
-            <!-- Dual Stream Telemetry Channels -->
-            <div class="space-y-3 pt-2">
-              
-              <!-- Stream 1: Supervised Stream -->
-              <div class="p-3.5 rounded-xl bg-surface-200/70 border border-surface-border">
-                <div class="flex items-center justify-between text-xs mb-1">
-                  <span class="text-gray-400 font-medium">Stream A: Known-Attack Classifier</span>
-                  <span id="supLabel" class="font-bold text-gray-200 font-mono">--</span>
-                </div>
-                <div class="w-full bg-surface-100 rounded-full h-2 overflow-hidden border border-surface-border">
-                  <div id="supBar" class="bg-gradient-to-r from-accent-cyan to-blue-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-                <div class="flex justify-between text-[11px] text-gray-500 font-mono mt-1.5">
-                  <span>Ensemble Confidence</span>
-                  <span id="supConf">0.0%</span>
-                </div>
-              </div>
-
-              <!-- Stream 2: Unsupervised Autoencoder Stream -->
-              <div class="p-3.5 rounded-xl bg-surface-200/70 border border-surface-border">
-                <div class="flex items-center justify-between text-xs mb-1">
-                  <span class="text-gray-400 font-medium">Stream B: Unsupervised Autoencoder</span>
-                  <span id="aeFlag" class="font-bold text-gray-300 font-mono">NORMAL</span>
-                </div>
-                <div class="w-full bg-surface-100 rounded-full h-2 overflow-hidden border border-surface-border">
-                  <div id="aeBar" class="bg-gradient-to-r from-emerald-400 to-accent-emerald h-full rounded-full transition-all duration-500" style="width: 15%"></div>
-                </div>
-                <div class="flex justify-between text-[11px] text-gray-500 font-mono mt-1.5">
-                  <span>Reconstruction MSE</span>
-                  <span id="aeScore">0.00e+00</span>
-                </div>
-              </div>
-
-            </div>
+            <p class="text-[11px] text-slate-400 font-medium">Dual-Stream Intrusion Detection & Zero-Day Mitigation Platform</p>
           </div>
-
-          <!-- Bottom Telemetry Footer -->
-          <div class="pt-4 border-t border-surface-border flex items-center justify-between text-[11px] font-mono text-gray-400">
-            <span>SERVERLESS RUNTIME: FAST</span>
-            <span id="execTimer">Exec: 0.12 ms</span>
-          </div>
-
         </div>
-      </div>
 
-      <!-- Column 3: SHAP Explainability & Attribution (4 cols) -->
-      <div class="lg:col-span-4 space-y-4">
-        <div class="glass-panel p-6 rounded-2xl flex flex-col h-full">
-          
-          <div class="flex items-center justify-between border-b border-surface-border pb-3 mb-3">
-            <div>
-              <h2 class="text-sm font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-fingerprint text-accent-violet"></i> Explainable AI (SHAP)
-              </h2>
-              <p class="text-xs text-gray-400 mt-0.5">Game-theoretic feature attributions for this flow.</p>
-            </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/10 text-accent-violet border border-accent-violet/20">TreeSHAP</span>
+        <!-- Center Nav Tabs -->
+        <nav class="hidden lg:flex items-center gap-1 p-1 bg-white/[0.03] border border-white/[0.08] rounded-xl text-xs font-medium text-slate-300">
+          <button onclick="switchTab('dashboard')" id="nav-dashboard" class="px-3.5 py-1.5 rounded-lg bg-white/10 text-white font-semibold shadow-sm transition">
+            <i class="fa-solid fa-radar mr-1.5 text-brand-cyan"></i> Live SOC Console
+          </button>
+          <button onclick="switchTab('fusion')" id="nav-fusion" class="px-3.5 py-1.5 rounded-lg hover:text-white hover:bg-white/[0.04] transition">
+            <i class="fa-solid fa-code-merge mr-1.5 text-brand-indigo"></i> Dual-Stream Fusion
+          </button>
+          <button onclick="switchTab('xai')" id="nav-xai" class="px-3.5 py-1.5 rounded-lg hover:text-white hover:bg-white/[0.04] transition">
+            <i class="fa-solid fa-brain mr-1.5 text-brand-violet"></i> Explainable AI (SHAP)
+          </button>
+          <button onclick="switchTab('batch')" id="nav-batch" class="px-3.5 py-1.5 rounded-lg hover:text-white hover:bg-white/[0.04] transition">
+            <i class="fa-solid fa-file-csv mr-1.5 text-brand-emerald"></i> Batch Ingestion
+          </button>
+          <button onclick="switchTab('benchmarks')" id="nav-benchmarks" class="px-3.5 py-1.5 rounded-lg hover:text-white hover:bg-white/[0.04] transition">
+            <i class="fa-solid fa-chart-line mr-1.5 text-brand-amber"></i> Benchmark Lab
+          </button>
+        </nav>
+
+        <!-- Right System Telemetry Chips -->
+        <div class="flex items-center space-x-3 text-xs">
+          <!-- Engine Status Pill -->
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-[11px]">
+            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>ENGINE: OPERATIONAL</span>
           </div>
 
-          <!-- SHAP Bars Container -->
-          <div id="shapContainer" class="flex-1 space-y-2.5 overflow-y-auto max-h-[360px] pr-1">
-            <div class="text-center py-20 text-gray-500 text-xs font-mono">
-              <i class="fa-solid fa-chart-simple text-3xl mb-3 opacity-30 text-accent-violet"></i>
-              <p>Awaiting network flow execution to compute SHAP attributions...</p>
-            </div>
-          </div>
-
-          <!-- SHAP Footer Info -->
-          <div class="pt-3 border-t border-surface-border text-[11px] text-gray-500 flex items-center justify-between font-mono">
-            <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-accent-ruby"></span> Attack Indicator (+)</span>
-            <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-accent-emerald"></span> Benign Flow (-)</span>
-          </div>
-
+          <!-- Vercel Serverless Ready Pill -->
+          <a href="https://github.com/yorayriniwnl/Hybrid-Intelligent-Network-Intrusion-Detection-System" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] hover:border-white/20 text-slate-300 hover:text-white font-mono text-[11px] transition">
+            <span class="text-white font-bold">▲ Vercel</span>
+            <span class="text-slate-600">|</span>
+            <i class="fa-brands fa-github text-xs"></i>
+          </a>
         </div>
+
       </div>
+    </header>
 
-    </div>
+    <!-- ============================================================
+         Main App Container
+         ============================================================ -->
+    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-7 space-y-7">
 
-    <!-- Architectural Benchmarks & Model Evaluation Table -->
-    <section class="glass-panel p-6 rounded-2xl space-y-4" id="section-benchmarks">
-      <div class="flex items-center justify-between border-b border-surface-border pb-3">
+      <!-- ============================================================
+           Hero Command Strip & Active Security Status
+           ============================================================ -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl glass-panel relative overflow-hidden">
+        <!-- Background light streak -->
+        <div class="absolute top-0 right-0 w-96 h-full bg-gradient-to-l from-brand-indigo/10 via-brand-cyan/5 to-transparent pointer-events-none"></div>
+
         <div>
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-chart-column text-accent-cyan"></i> Evaluated Model Architecture Benchmarks
+          <div class="flex items-center gap-2 mb-1">
+            <span class="glow-badge glow-badge-indigo">
+              <i class="fa-solid fa-microchip text-[10px]"></i> ACTIVE DEFENSE MATRIX
+            </span>
+            <span class="text-[11px] font-mono text-slate-400">CIC-IDS2017 PRODUCTION SUITE</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+            Real-Time Dual-Stream Threat Interception Console
           </h2>
-          <p class="text-xs text-gray-400 mt-0.5">Performance metrics across 17,248 unseen test flows from CIC-IDS2017.</p>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl">
+            Fusing supervised tree classification (<span class="text-brand-cyan font-mono">XGBoost 99.99%</span>) with an unsupervised deep bottleneck autoencoder (<span class="text-brand-emerald font-mono">0.40 µs latency</span>) to defeat the Closed-World Assumption and mitigate novel zero-day attacks.
+          </p>
         </div>
+
+        <!-- Quick Telemetry Micro-Widget -->
+        <div class="flex items-center gap-3 shrink-0">
+          <div class="px-4 py-2.5 rounded-xl bg-white/[0.02] border border-white/[0.08] text-right">
+            <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400 font-mono">Stream Throughput</div>
+            <div class="text-lg font-bold font-mono text-brand-cyan tabular-nums" id="hero-throughput">2,517,295</div>
+            <div class="text-[10px] text-slate-500 font-mono">flows / sec line rate</div>
+          </div>
+          <div class="px-4 py-2.5 rounded-xl bg-white/[0.02] border border-white/[0.08] text-right">
+            <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400 font-mono">Decision Latency</div>
+            <div class="text-lg font-bold font-mono text-brand-emerald tabular-nums">0.40 µs</div>
+            <div class="text-[10px] text-slate-500 font-mono">sub-microsecond SLA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           5 Key Performance Indicator Metric Cards
+           ============================================================ -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <!-- Card 1 -->
+        <div class="glass-card p-4 relative overflow-hidden group">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Flows Inspected</span>
+            <div class="h-7 w-7 rounded-lg bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center text-brand-cyan text-xs">
+              <i class="fa-solid fa-network-wired"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-extrabold text-white font-mono tracking-tight tabular-nums" id="stat-total">100,000</div>
+          <div class="flex items-center gap-1.5 mt-2 text-[11px] text-slate-400">
+            <span class="text-brand-emerald font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> 100%</span>
+            <span>Clean dataset verification</span>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card p-4 relative overflow-hidden group">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Verified Normal Traffic</span>
+            <div class="h-7 w-7 rounded-lg bg-brand-emerald/10 border border-brand-emerald/20 flex items-center justify-center text-brand-emerald text-xs">
+              <i class="fa-solid fa-shield-check"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-extrabold text-brand-emerald font-mono tracking-tight tabular-nums" id="stat-normal">44,520</div>
+          <div class="flex items-center gap-1.5 mt-2 text-[11px] text-slate-400">
+            <span class="text-brand-emerald font-semibold">0.0000%</span>
+            <span>False Alarm Rate (FAR)</span>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card p-4 relative overflow-hidden group">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Known Attacks Caught</span>
+            <div class="h-7 w-7 rounded-lg bg-brand-rose/10 border border-brand-rose/20 flex items-center justify-center text-brand-rose text-xs">
+              <i class="fa-solid fa-skull-crossbones"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-extrabold text-brand-rose font-mono tracking-tight tabular-nums" id="stat-attacks">55,480</div>
+          <div class="flex items-center gap-1.5 mt-2 text-[11px] text-slate-400">
+            <span class="text-brand-rose font-semibold">99.994%</span>
+            <span>Signature Accuracy</span>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="glass-card p-4 relative overflow-hidden group">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Zero-Day Interception</span>
+            <div class="h-7 w-7 rounded-lg bg-brand-amber/10 border border-brand-amber/20 flex items-center justify-center text-brand-amber text-xs">
+              <i class="fa-solid fa-radiation"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-extrabold text-brand-amber font-mono tracking-tight tabular-nums" id="stat-anomalies">71.1%</div>
+          <div class="flex items-center gap-1.5 mt-2 text-[11px] text-slate-400">
+            <span class="text-brand-amber font-semibold">+71.1%</span>
+            <span>Held-out DDoS Intercepted</span>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="glass-card p-4 relative overflow-hidden group">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Model Framework</span>
+            <div class="h-7 w-7 rounded-lg bg-brand-violet/10 border border-brand-violet/20 flex items-center justify-center text-brand-violet text-xs">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+          </div>
+          <div class="text-lg font-bold text-white font-mono tracking-tight mt-0.5">Dual-Stream</div>
+          <div class="flex items-center gap-1.5 mt-2 text-[11px] text-slate-400">
+            <span class="text-brand-violet font-semibold">GBDT + AE</span>
+            <span>Decision Fusion</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================================
+           SECTION: Dual-Stream Live Testing Console (The Core Workspace)
+           ============================================================ -->
+      <div id="section-workspace" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Column 1: Preset Scenario Triggers & Custom Flow Inspector (5 cols) -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="glass-panel p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-white/[0.06] pb-3.5">
+              <div>
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <i class="fa-solid fa-play text-brand-indigo"></i> Threat Scenario Launcher
+                </h3>
+                <p class="text-xs text-slate-400 mt-0.5">Select a traffic flow to test real-time Dual-Stream fusion.</p>
+              </div>
+              <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/[0.06]">
+                INTERACTIVE
+              </span>
+            </div>
+
+            <!-- Scenario Card 1: Benign -->
+            <button onclick="runScenario('benign', this)" id="btn-scenario-benign" class="w-full text-left p-4 rounded-xl glass-card transition group border border-white/[0.08] hover:border-brand-emerald/50 hover:bg-emerald-500/[0.03]">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-300 group-hover:text-emerald-300">Scenario 1 • Normal Traffic</span>
+                  </div>
+                  <h4 class="text-sm font-semibold text-white mt-1 group-hover:text-emerald-200">Legitimate Enterprise HTTPS Session</h4>
+                  <p class="text-[11px] text-slate-400 mt-1">Port 443 • 5.7s duration • 8 Fwd / 7 Bwd packets • Concordant benign reconstruction.</p>
+                </div>
+                <span class="glow-badge glow-badge-emerald shrink-0">BENIGN</span>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-white/[0.04] flex items-center justify-between text-[11px] font-mono text-slate-500">
+                <span>Expected: Normal (LOW)</span>
+                <span class="text-emerald-400 group-hover:translate-x-1 transition"><i class="fa-solid fa-arrow-right"></i> Inject Flow</span>
+              </div>
+            </button>
+
+            <!-- Scenario Card 2: PortScan -->
+            <button onclick="runScenario('portscan', this)" id="btn-scenario-portscan" class="w-full text-left p-4 rounded-xl glass-card transition group border border-white/[0.08] hover:border-brand-rose/50 hover:bg-rose-500/[0.03]">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-rose-400"></span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-300 group-hover:text-rose-300">Scenario 2 • Known Attack</span>
+                  </div>
+                  <h4 class="text-sm font-semibold text-white mt-1 group-hover:text-rose-200">PortScan Reconnaissance Sweep</h4>
+                  <p class="text-[11px] text-slate-400 mt-1">Port 84 • 44 µs duration • 0 payload bytes • SYN-flag stealth host scan probe.</p>
+                </div>
+                <span class="glow-badge glow-badge-rose shrink-0">PORTSCAN</span>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-white/[0.04] flex items-center justify-between text-[11px] font-mono text-slate-500">
+                <span>Expected: Known Attack (HIGH)</span>
+                <span class="text-rose-400 group-hover:translate-x-1 transition"><i class="fa-solid fa-arrow-right"></i> Inject Flow</span>
+              </div>
+            </button>
+
+            <!-- Scenario Card 3: Zero-Day / Held-Out -->
+            <button onclick="runScenario('zero_day', this)" id="btn-scenario-zero_day" class="w-full text-left p-4 rounded-xl glass-card transition group border border-white/[0.08] hover:border-brand-amber/50 hover:bg-amber-500/[0.03]">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-amber-400"></span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-300 group-hover:text-amber-300">Scenario 3 • Zero-Day Threat</span>
+                  </div>
+                  <h4 class="text-sm font-semibold text-white mt-1 group-hover:text-amber-200">Held-Out Volumetric DDoS Attack</h4>
+                  <p class="text-[11px] text-slate-400 mt-1">Excluded from supervised training • Autoencoder flags extreme reconstruction spike.</p>
+                </div>
+                <span class="glow-badge glow-badge-amber shrink-0">HELD-OUT</span>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-white/[0.04] flex items-center justify-between text-[11px] font-mono text-slate-500">
+                <span>Expected: Zero-Day / Anomaly (CRITICAL)</span>
+                <span class="text-amber-400 group-hover:translate-x-1 transition"><i class="fa-solid fa-arrow-right"></i> Inject Flow</span>
+              </div>
+            </button>
+
+            <!-- Custom Flow Sandbox Toggle -->
+            <div class="pt-2">
+              <button onclick="toggleCustomFlowModal()" class="w-full py-2.5 px-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 transition">
+                <i class="fa-solid fa-sliders text-brand-indigo"></i> Open Custom Flow Parameter Sandbox
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Column 2: Dual-Stream Inspection & Fusion Verdict (7 cols) -->
+        <div class="lg:col-span-7 space-y-5">
+          
+          <!-- Unified Fusion Decision Hero Card -->
+          <div class="glass-panel p-6 relative overflow-hidden">
+            <!-- Dynamic Aura Glow -->
+            <div id="verdictAura" class="absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl pointer-events-none transition-all duration-700 bg-emerald-500/10"></div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
+              <div>
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                  <i class="fa-solid fa-shield-virus text-brand-indigo"></i> Decision Fusion Outcome
+                </div>
+                <h3 class="text-lg font-bold text-white mt-0.5" id="verdictTitle">Awaiting Traffic Flow Analysis...</h3>
+              </div>
+              <div id="verdictBadge" class="glow-badge glow-badge-indigo text-xs">
+                READY FOR INGESTION
+              </div>
+            </div>
+
+            <!-- Fusion Verdict Narrative -->
+            <div class="py-4">
+              <div class="text-xs text-slate-400 font-mono mb-1">INCIDENT RESPONSE RATIONALE</div>
+              <p class="text-sm font-medium text-slate-200 leading-relaxed bg-black/30 p-3.5 rounded-xl border border-white/[0.06]" id="verdictRationale">
+                Click any scenario on the left or inject a custom flow packet vector to evaluate the dual-stream consensus matrix.
+              </p>
+            </div>
+
+            <!-- The Two Streams Side-by-Side -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              
+              <!-- STREAM 1: Supervised XGBoost Classifier -->
+              <div class="p-4 rounded-xl bg-space-900/60 border border-white/[0.06] space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="h-6 w-6 rounded-md bg-brand-cyan/15 text-brand-cyan flex items-center justify-center text-xs">
+                      <i class="fa-solid fa-tree"></i>
+                    </div>
+                    <span class="text-xs font-bold text-white">Stream 1: Supervised (XGB)</span>
+                  </div>
+                  <span class="text-[10px] font-mono text-slate-500">100 Trees</span>
+                </div>
+
+                <div class="space-y-1.5">
+                  <div class="flex justify-between text-xs font-mono">
+                    <span class="text-slate-400">Class Label:</span>
+                    <span class="font-bold text-white" id="supLabel">—</span>
+                  </div>
+                  <div class="flex justify-between text-xs font-mono">
+                    <span class="text-slate-400">Confidence:</span>
+                    <span class="font-bold text-brand-cyan tabular-nums" id="supConf">—</span>
+                  </div>
+                </div>
+
+                <!-- Probability Bar -->
+                <div class="w-full bg-space-950 rounded-full h-2 overflow-hidden border border-white/[0.08]">
+                  <div id="supProgressBar" class="h-full bg-gradient-to-r from-brand-cyan to-brand-indigo rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <div class="text-[10px] text-slate-500 font-mono text-right" id="supBarLabel">0.0% Confidence</div>
+              </div>
+
+              <!-- STREAM 2: Unsupervised Autoencoder Anomaly Detector -->
+              <div class="p-4 rounded-xl bg-space-900/60 border border-white/[0.06] space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="h-6 w-6 rounded-md bg-brand-emerald/15 text-brand-emerald flex items-center justify-center text-xs">
+                      <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <span class="text-xs font-bold text-white">Stream 2: Autoencoder</span>
+                  </div>
+                  <span class="text-[10px] font-mono text-slate-500">48-24-12-24-48</span>
+                </div>
+
+                <div class="space-y-1.5">
+                  <div class="flex justify-between text-xs font-mono">
+                    <span class="text-slate-400">Recon Loss:</span>
+                    <span class="font-bold text-white tabular-nums" id="aeLoss">—</span>
+                  </div>
+                  <div class="flex justify-between text-xs font-mono">
+                    <span class="text-slate-400">Threshold:</span>
+                    <span class="font-bold text-slate-400 tabular-nums">2.07e+14</span>
+                  </div>
+                </div>
+
+                <!-- Anomaly Flag Bar -->
+                <div class="w-full bg-space-950 rounded-full h-2 overflow-hidden border border-white/[0.08]">
+                  <div id="aeProgressBar" class="h-full bg-gradient-to-r from-brand-emerald to-brand-amber rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <div class="text-[10px] text-slate-500 font-mono text-right" id="aeStatus">Normal Profile</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Feature Attributions (Tree SHAP Explainability Matrix) -->
+          <div class="glass-panel p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-white/[0.06] pb-3">
+              <div>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <i class="fa-solid fa-chart-column text-brand-violet"></i> Game-Theoretic SHAP Feature Attributions
+                </h4>
+                <p class="text-[11px] text-slate-400 mt-0.5">Exact local contributions driving the decision.</p>
+              </div>
+              <span class="text-[10px] font-mono text-slate-500">E[f(x)]: <span id="shapBaseVal" class="text-slate-400">0.000</span></span>
+            </div>
+
+            <div id="shapContainer" class="space-y-2">
+              <div class="py-6 text-center text-xs text-slate-500 font-mono">
+                No active flow analyzed yet. Trigger a scenario to visualize feature attributions.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ============================================================
+           SECTION: Batch PCAP / CSV Network File Upload
+           ============================================================ -->
+      <div id="section-batch" class="glass-panel p-6 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.06] pb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="glow-badge glow-badge-emerald">LINE-RATE BATCH PROCESSING</span>
+              <span class="text-[11px] font-mono text-slate-400">UP TO 1,000 FLOWS / INVOCATION</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-1">Network Flow File Ingestion (CSV / PCAP Extraction)</h3>
+            <p class="text-xs text-slate-400">Upload bulk network flow records to process through Dual-Stream intrusion scoring.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="downloadSyntheticCSV()" class="px-3.5 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
+              <i class="fa-solid fa-download text-brand-cyan"></i> Generate Test CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Dropzone -->
+        <div class="relative border-2 border-dashed border-white/10 hover:border-brand-indigo/50 rounded-2xl p-8 text-center bg-white/[0.01] hover:bg-brand-indigo/[0.02] transition cursor-pointer group" onclick="document.getElementById('csvFileInput').click()">
+          <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="uploadCSV(this)">
+          <div class="flex flex-col items-center justify-center space-y-3">
+            <div class="h-14 w-14 rounded-2xl bg-brand-indigo/10 border border-brand-indigo/30 flex items-center justify-center text-brand-indigo text-2xl group-hover:scale-110 transition">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-white">Click to upload or drag & drop network flow CSV</p>
+              <p class="text-xs text-slate-400 mt-1">Supports standard CIC-IDS2017 exported flow feature vectors</p>
+            </div>
+            <div class="text-[10px] font-mono text-slate-500 bg-white/[0.04] px-3 py-1 rounded-full border border-white/[0.06]">
+              FORMAT: .CSV (Max 1,000 samples per serverless batch)
+            </div>
+          </div>
+        </div>
+
+        <!-- Batch Results Area (Hidden by default) -->
+        <div id="batchResultsArea" class="hidden space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-space-900/60 border border-white/[0.06]">
+              <div class="text-[11px] font-mono text-slate-400">Total Analyzed</div>
+              <div class="text-xl font-bold font-mono text-white mt-1" id="batchTotal">—</div>
+            </div>
+            <div class="p-4 rounded-xl bg-space-900/60 border border-white/[0.06]">
+              <div class="text-[11px] font-mono text-emerald-400">Normal Flows</div>
+              <div class="text-xl font-bold font-mono text-emerald-400 mt-1" id="batchNormal">—</div>
+            </div>
+            <div class="p-4 rounded-xl bg-space-900/60 border border-white/[0.06]">
+              <div class="text-[11px] font-mono text-rose-400">Known Attacks</div>
+              <div class="text-xl font-bold font-mono text-rose-400 mt-1" id="batchAttacks">—</div>
+            </div>
+            <div class="p-4 rounded-xl bg-space-900/60 border border-white/[0.06]">
+              <div class="text-[11px] font-mono text-amber-400">Zero-Day Anomalies</div>
+              <div class="text-xl font-bold font-mono text-amber-400 mt-1" id="batchZeroDay">—</div>
+            </div>
+          </div>
+
+          <!-- Sample Flagged Alert Table -->
+          <div class="space-y-3">
+            <div class="text-xs font-mono font-bold text-white uppercase tracking-wider">Top Intercepted Security Alerts</div>
+            <div class="overflow-x-auto rounded-xl border border-white/[0.06] bg-space-900/40">
+              <table class="w-full text-left text-xs font-mono">
+                <thead class="bg-white/[0.03] text-slate-400 uppercase text-[10px] border-b border-white/[0.06]">
+                  <tr>
+                    <th class="py-3 px-4">Verdict</th>
+                    <th class="py-3 px-4">Severity</th>
+                    <th class="py-3 px-4">Sub-Category</th>
+                    <th class="py-3 px-4">Confidence / Anomaly Score</th>
+                    <th class="py-3 px-4">Action Rationale</th>
+                  </tr>
+                </thead>
+                <tbody id="batchAlertsBody" class="divide-y divide-white/[0.04] text-slate-300">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================================
+           SECTION: Model Lab & Comparative Benchmarks
+           ============================================================ -->
+      <div id="section-benchmarks" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Chart 1: Multi-Model Benchmark Comparison -->
+        <div class="glass-panel p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-white/[0.06] pb-3">
+            <div>
+              <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-chart-simple text-brand-cyan"></i> Accuracy & F1-Score Comparison
+              </h4>
+              <p class="text-[11px] text-slate-400">Evaluated on 17,248 held-out test network flows.</p>
+            </div>
+            <span class="text-[10px] font-mono text-brand-emerald bg-brand-emerald/10 px-2 py-0.5 rounded border border-brand-emerald/20">TEST TESTED</span>
+          </div>
+          <div class="h-64 relative">
+            <canvas id="modelComparisonChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 2: Inference Latency vs Throughput -->
+        <div class="glass-panel p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-white/[0.06] pb-3">
+            <div>
+              <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-brand-amber"></i> Inference Latency (Microseconds / Flow)
+              </h4>
+              <p class="text-[11px] text-slate-400">Comparing XGBoost, Random Forest, and TabTransformer.</p>
+            </div>
+            <span class="text-[10px] font-mono text-brand-cyan bg-brand-cyan/10 px-2 py-0.5 rounded border border-brand-cyan/20">0.40 µs RECORD</span>
+          </div>
+          <div class="h-64 relative">
+            <canvas id="latencyComparisonChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- ============================================================
+         Footer
+         ============================================================ -->
+    <footer class="border-t border-white/[0.06] bg-space-950/80 backdrop-blur-md py-6 mt-12 text-xs font-mono text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-2">
-          <span class="text-xs font-mono text-gray-400 bg-white/5 px-2.5 py-1 rounded-lg border border-surface-border">Zero Leakage Stratification</span>
+          <span>🛡️ H-NIDS • Dual-Stream Intrusion Detection & Zero-Day Mitigation</span>
+          <span>•</span>
+          <span class="text-slate-400">B.Tech Major Project</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-brand-emerald">● REST API Online</span>
+          <span>•</span>
+          <span>Vercel Edge Optimized</span>
+          <span>•</span>
+          <a href="https://github.com/yorayriniwnl/Hybrid-Intelligent-Network-Intrusion-Detection-System" target="_blank" class="text-slate-400 hover:text-white transition">
+            <i class="fa-brands fa-github"></i> GitHub
+          </a>
         </div>
       </div>
+    </footer>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs font-mono">
-          <thead class="bg-surface-200/80 text-gray-400 border-b border-surface-border">
-            <tr>
-              <th class="py-3 px-4 rounded-l-lg">Model Architecture</th>
-              <th class="py-3 px-4">Type</th>
-              <th class="py-3 px-4">Accuracy</th>
-              <th class="py-3 px-4">Precision / Recall</th>
-              <th class="py-3 px-4">F1-Score</th>
-              <th class="py-3 px-4">Latency</th>
-              <th class="py-3 px-4 rounded-r-lg">Role in H-NIDS Architecture</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-surface-border/60">
-            <tr class="hover:bg-white/[0.02] transition">
-              <td class="py-3.5 px-4 font-bold text-white flex items-center gap-2">
-                <span class="h-2 w-2 rounded-full bg-accent-emerald"></span>
-                XGBoost (Production Baseline)
-              </td>
-              <td class="py-3.5 px-4 text-accent-cyan">Gradient Boosted Trees</td>
-              <td class="py-3.5 px-4 text-accent-emerald font-bold">99.994%</td>
-              <td class="py-3.5 px-4 text-gray-300">99.99% / 99.99%</td>
-              <td class="py-3.5 px-4 text-accent-emerald font-bold">99.994%</td>
-              <td class="py-3.5 px-4 text-accent-cyan font-bold">0.40 µs</td>
-              <td class="py-3.5 px-4 text-gray-300">Wire-speed known attack classification stream</td>
-            </tr>
-            <tr class="hover:bg-white/[0.02] transition">
-              <td class="py-3.5 px-4 font-bold text-white flex items-center gap-2">
-                <span class="h-2 w-2 rounded-full bg-gray-500"></span>
-                Random Forest
-              </td>
-              <td class="py-3.5 px-4 text-gray-400">Bagged Decision Ensemble</td>
-              <td class="py-3.5 px-4 text-accent-emerald">99.988%</td>
-              <td class="py-3.5 px-4 text-gray-300">99.99% / 99.99%</td>
-              <td class="py-3.5 px-4 text-accent-emerald">99.988%</td>
-              <td class="py-3.5 px-4 text-gray-400">2.49 µs</td>
-              <td class="py-3.5 px-4 text-gray-300">Phase 1 comparative baseline</td>
-            </tr>
-            <tr class="hover:bg-white/[0.02] transition">
-              <td class="py-3.5 px-4 font-bold text-white flex items-center gap-2">
-                <span class="h-2 w-2 rounded-full bg-accent-violet"></span>
-                TabTransformer (PyTorch)
-              </td>
-              <td class="py-3.5 px-4 text-accent-violet">Multi-Head Self-Attention</td>
-              <td class="py-3.5 px-4 text-accent-emerald">99.940%</td>
-              <td class="py-3.5 px-4 text-gray-300">99.94% / 99.95%</td>
-              <td class="py-3.5 px-4 text-accent-emerald">99.940%</td>
-              <td class="py-3.5 px-4 text-gray-400">177.5 µs</td>
-              <td class="py-3.5 px-4 text-gray-300">Deep tabular cross-feature interaction modeling</td>
-            </tr>
-            <tr class="hover:bg-white/[0.02] transition">
-              <td class="py-3.5 px-4 font-bold text-white flex items-center gap-2">
-                <span class="h-2 w-2 rounded-full bg-accent-amber"></span>
-                Deep Autoencoder
-              </td>
-              <td class="py-3.5 px-4 text-accent-amber">Symmetric Bottleneck (48-24-12)</td>
-              <td class="py-3.5 px-4 text-gray-400">Unsupervised</td>
-              <td class="py-3.5 px-4 text-gray-400">Benign Reconstruction</td>
-              <td class="py-3.5 px-4 text-accent-amber font-bold">98.5% Threshold</td>
-              <td class="py-3.5 px-4 text-gray-400">12.1 µs</td>
-              <td class="py-3.5 px-4 text-gray-300">Zero-Day / Out-of-Distribution interception (71.1% DDoS)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+  </div>
 
-  </main>
-
-  <!-- Interactive Custom Flow Modal -->
-  <div id="customFlowModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
-    <div class="glass-panel max-w-xl w-full p-6 rounded-2xl border border-surface-border space-y-4 shadow-glass">
-      <div class="flex items-center justify-between border-b border-surface-border pb-3">
-        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-sliders text-accent-cyan"></i> Custom Flow Parameter Tuning
-        </h3>
-        <button onclick="closeCustomInspectorModal()" class="text-gray-400 hover:text-white transition">
-          <i class="fa-solid fa-xmark text-lg"></i>
+  <!-- ============================================================
+       Custom Flow Sandbox Modal (CandidateX GlassModal)
+       ============================================================ -->
+  <div id="customFlowModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden">
+    <div class="glass-panel max-w-xl w-full p-6 space-y-5 border border-white/[0.12] shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-white/[0.08] pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="h-8 w-8 rounded-lg bg-brand-indigo/15 text-brand-indigo flex items-center justify-center text-sm">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">Custom Network Flow Parameter Sandbox</h3>
+            <p class="text-xs text-slate-400">Inject custom packet values to test Dual-Stream decision thresholds.</p>
+          </div>
+        </div>
+        <button onclick="toggleCustomFlowModal()" class="text-slate-400 hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <div class="grid grid-cols-2 gap-4 text-xs font-mono">
+      <div class="grid grid-cols-2 gap-3.5 text-xs font-mono">
         <div>
-          <label class="block text-gray-400 mb-1">Destination Port</label>
-          <input type="number" id="inp-port" value="443" class="w-full bg-surface-200 border border-surface-border rounded-lg p-2 text-white focus:outline-none focus:border-accent-cyan">
+          <label class="block text-slate-400 mb-1">Destination Port</label>
+          <input type="number" id="inp-port" value="443" class="w-full bg-space-900 border border-white/[0.1] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-brand-indigo">
         </div>
         <div>
-          <label class="block text-gray-400 mb-1">Flow Duration (µs)</label>
-          <input type="number" id="inp-duration" value="5696503" class="w-full bg-surface-200 border border-surface-border rounded-lg p-2 text-white focus:outline-none focus:border-accent-cyan">
+          <label class="block text-slate-400 mb-1">Flow Duration (µs)</label>
+          <input type="number" id="inp-duration" value="500000" class="w-full bg-space-900 border border-white/[0.1] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-brand-indigo">
         </div>
         <div>
-          <label class="block text-gray-400 mb-1">Total Forward Packets</label>
-          <input type="number" id="inp-fwd-packets" value="8" class="w-full bg-surface-200 border border-surface-border rounded-lg p-2 text-white focus:outline-none focus:border-accent-cyan">
+          <label class="block text-slate-400 mb-1">Total Fwd Packets</label>
+          <input type="number" id="inp-fwd-pkts" value="12" class="w-full bg-space-900 border border-white/[0.1] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-brand-indigo">
         </div>
         <div>
-          <label class="block text-gray-400 mb-1">Total Length Fwd Packets</label>
-          <input type="number" id="inp-fwd-len" value="621" class="w-full bg-surface-200 border border-surface-border rounded-lg p-2 text-white focus:outline-none focus:border-accent-cyan">
+          <label class="block text-slate-400 mb-1">Total Backward Packets</label>
+          <input type="number" id="inp-bwd-pkts" value="10" class="w-full bg-space-900 border border-white/[0.1] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-brand-indigo">
         </div>
         <div>
-          <label class="block text-gray-400 mb-1">Flow Bytes / Second</label>
-          <input type="number" id="inp-bytes-sec" value="929" class="w-full bg-surface-200 border border-surface-border rounded-lg p-2 text-white focus:outline-none focus:border-accent-cyan">
+          <label class="block text-slate-400 mb-1">Flow Bytes / Second</label>
+          <input type="number" id="inp-bytes-sec" value="45000" class="w-full bg-space-900 border border-white/[0.1] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-brand-indigo">
         </div>
         <div>
-          <label class="block text-gray-400 mb-1">PSH Flag Count</label>
-          <input type="number" id="inp-psh" value="1" class="w-full bg-surface-200 border border-surface-border rounded-lg p-2 text-white focus:outline-none focus:border-accent-cyan">
+          <label class="block text-slate-400 mb-1">PSH Flag Count</label>
+          <input type="number" id="inp-psh" value="1" min="0" max="1" class="w-full bg-space-900 border border-white/[0.1] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-brand-indigo">
         </div>
       </div>
 
-      <div class="flex justify-end space-x-3 pt-3 border-t border-surface-border">
-        <button onclick="closeCustomInspectorModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white transition">Cancel</button>
-        <button onclick="submitCustomFlow()" class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-accent-cyan text-black hover:bg-cyan-300 font-semibold transition">
-          <i class="fa-solid fa-play mr-1.5"></i> Evaluate Custom Flow
-        </button>
+      <div class="flex items-center justify-end gap-3 pt-2 border-t border-white/[0.08]">
+        <button onclick="toggleCustomFlowModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition">Cancel</button>
+        <button onclick="submitCustomFlow()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-brand-indigo to-brand-cyan text-white text-xs font-bold hover:shadow-lg hover:shadow-brand-indigo/25 transition">Run Inspection</button>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="border-t border-surface-border px-6 py-4 text-center text-xs text-gray-500 font-mono">
-    CandidateX Intelligent NIDS • Dual-Stream Intrusion Detection System • Built for Enterprise Cyber Operations
-  </footer>
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-6 right-6 z-50 space-y-2 pointer-events-none"></div>
 
-  <!-- Frontend Logic -->
+  <!-- ============================================================
+       Interactive Frontend Logic & REST API Client
+       ============================================================ -->
   <script>
-    // Live clock ticker
-    function updateClock() {
-      const now = new Date();
-      document.getElementById('liveClock').innerText = now.toTimeString().split(' ')[0] + ' UTC';
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+    // System state
+    let statsData = null;
 
-    function openCustomInspectorModal() {
-      const m = document.getElementById('customFlowModal');
-      m.classList.remove('hidden');
-      m.classList.add('flex');
+    // Run on startup
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchSystemStats();
+      initCharts();
+    });
+
+    // Toast alert helper
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `p-3.5 rounded-xl border text-xs font-mono flex items-center gap-2.5 shadow-xl transition-all duration-300 pointer-events-auto transform translate-y-2 opacity-0 ${
+        type === 'success' ? 'bg-emerald-950/80 border-emerald-500/40 text-emerald-300' :
+        type === 'error' ? 'bg-rose-950/80 border-rose-500/40 text-rose-300' :
+        'bg-space-900/90 border-brand-indigo/40 text-slate-200'
+      }`;
+      toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check text-emerald-400' : type === 'error' ? 'fa-triangle-exclamation text-rose-400' : 'fa-circle-info text-brand-cyan'}"></i><span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
     }
 
-    function closeCustomInspectorModal() {
-      const m = document.getElementById('customFlowModal');
-      m.classList.remove('flex');
-      m.classList.add('hidden');
+    // Tab navigation switcher
+    function switchTab(tabId) {
+      const tabs = ['dashboard', 'fusion', 'xai', 'batch', 'benchmarks'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`nav-${t}`);
+        if (btn) {
+          if (t === tabId) {
+            btn.className = "px-3.5 py-1.5 rounded-lg bg-white/10 text-white font-semibold shadow-sm transition";
+          } else {
+            btn.className = "px-3.5 py-1.5 rounded-lg hover:text-white hover:bg-white/[0.04] transition";
+          }
+        }
+      });
+
+      // Scroll smoothly to section
+      if (tabId === 'batch') {
+        document.getElementById('section-batch').scrollIntoView({ behavior: 'smooth' });
+      } else if (tabId === 'benchmarks') {
+        document.getElementById('section-benchmarks').scrollIntoView({ behavior: 'smooth' });
+      } else {
+        document.getElementById('section-workspace').scrollIntoView({ behavior: 'smooth' });
+      }
     }
 
+    // Toggle custom flow modal
+    function toggleCustomFlowModal() {
+      const modal = document.getElementById('customFlowModal');
+      modal.classList.toggle('hidden');
+    }
+
+    // Submit custom flow from sandbox
     async function submitCustomFlow() {
-      closeCustomInspectorModal();
+      toggleCustomFlowModal();
       const payload = {
         features: {
-          "Destination Port": parseFloat(document.getElementById('inp-port').value) || 80,
-          "Flow Duration": parseFloat(document.getElementById('inp-duration').value) || 1000,
-          "Total Fwd Packets": parseFloat(document.getElementById('inp-fwd-packets').value) || 1,
-          "Total Length of Fwd Packets": parseFloat(document.getElementById('inp-fwd-len').value) || 0,
-          "Flow Bytes/s": parseFloat(document.getElementById('inp-bytes-sec').value) || 100,
+          "Destination Port": parseFloat(document.getElementById('inp-port').value) || 443,
+          "Flow Duration": parseFloat(document.getElementById('inp-duration').value) || 100000,
+          "Total Fwd Packets": parseFloat(document.getElementById('inp-fwd-pkts').value) || 5,
+          "Total Backward Packets": parseFloat(document.getElementById('inp-bwd-pkts').value) || 5,
+          "Flow Bytes/s": parseFloat(document.getElementById('inp-bytes-sec').value) || 10000,
           "PSH Flag Count": parseFloat(document.getElementById('inp-psh').value) || 0
         }
       };
 
-      const t0 = performance.now();
       try {
         const res = await fetch('/api/predict/flow', {
           method: 'POST',
@@ -655,16 +898,39 @@
           body: JSON.stringify(payload)
         });
         const data = await res.json();
-        const t1 = performance.now();
-        document.getElementById('execTimer').innerText = `Exec: ${(t1 - t0).toFixed(2)} ms`;
         renderDecision(data);
+        showToast("Custom Flow evaluated through Dual-Stream Engine!", "success");
       } catch (err) {
-        alert("Failed to evaluate custom flow: " + err);
+        showToast("Failed to inspect custom flow: " + err, "error");
       }
     }
 
-    async function runScenario(scenario) {
-      const t0 = performance.now();
+    // Fetch initial system telemetry & metrics
+    async function fetchSystemStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        statsData = data;
+        
+        if (data.total_flows_inspected) {
+          document.getElementById('stat-total').innerText = data.total_flows_inspected.toLocaleString();
+        }
+      } catch (err) {
+        console.warn("API stats loaded with local defaults:", err);
+      }
+    }
+
+    // Run preset traffic scenario
+    async function runScenario(scenario, btnElement) {
+      // Highlight active card
+      document.querySelectorAll('#btn-scenario-benign, #btn-scenario-portscan, #btn-scenario-zero_day').forEach(el => {
+        el.classList.remove('glass-card-active');
+      });
+      if (btnElement) btnElement.classList.add('glass-card-active');
+
+      const titleEl = document.getElementById('verdictTitle');
+      titleEl.innerText = `Evaluating ${scenario.toUpperCase()} stream...`;
+
       try {
         const res = await fetch('/api/predict/preset', {
           method: 'POST',
@@ -672,85 +938,111 @@
           body: JSON.stringify({ scenario: scenario })
         });
         const data = await res.json();
-        const t1 = performance.now();
-        document.getElementById('execTimer').innerText = `Exec: ${(t1 - t0).toFixed(2)} ms`;
         renderDecision(data);
-
-        // Confetti on benign validation
-        if (data.decision && data.decision.severity === "LOW" && typeof confetti === 'function') {
-          confetti({ particleCount: 30, spread: 60, origin: { y: 0.85 } });
-        }
+        showToast(`Injected ${scenario.toUpperCase()} scenario successfully`, "success");
       } catch (err) {
-        alert("Failed to connect to H-NIDS API: " + err);
+        titleEl.innerText = "Connection Failed";
+        showToast("Error connecting to H-NIDS API: " + err, "error");
       }
     }
 
+    // Render Dual-Stream decisions and SHAP explainability
     function renderDecision(data) {
       const dec = data.decision;
-      const verdictText = document.getElementById('verdictText');
+      const verdictTitle = document.getElementById('verdictTitle');
       const verdictBadge = document.getElementById('verdictBadge');
-      const supLabel = document.getElementById('supLabel');
-      const supConf = document.getElementById('supConf');
-      const supBar = document.getElementById('supBar');
-      const aeScore = document.getElementById('aeScore');
-      const aeFlag = document.getElementById('aeFlag');
-      const aeBar = document.getElementById('aeBar');
-      const rationaleText = document.getElementById('rationaleText');
+      const verdictRationale = document.getElementById('verdictRationale');
+      const verdictAura = document.getElementById('verdictAura');
 
-      verdictText.innerText = dec.final_verdict;
-      rationaleText.innerText = dec.rationale;
-      supLabel.innerText = dec.supervised_label;
-      supConf.innerText = `${(dec.supervised_confidence * 100).toFixed(1)}%`;
-      supBar.style.width = `${Math.min(100, dec.supervised_confidence * 100)}%`;
-
-      aeScore.innerText = dec.anomaly_score > 1e6 ? dec.anomaly_score.toExponential(2) : dec.anomaly_score.toFixed(2);
-      aeFlag.innerText = dec.is_anomaly ? "ANOMALOUS SPIKE" : "NORMAL RECON";
-
-      if (dec.is_anomaly) {
-        aeBar.className = "bg-gradient-to-r from-amber-500 to-accent-ruby h-full rounded-full transition-all duration-500";
-        aeBar.style.width = "100%";
-        aeFlag.className = "font-bold text-accent-ruby font-mono";
-      } else {
-        aeBar.className = "bg-gradient-to-r from-emerald-400 to-accent-emerald h-full rounded-full transition-all duration-500";
-        aeBar.style.width = "25%";
-        aeFlag.className = "font-bold text-accent-emerald font-mono";
-      }
+      // 1. Unified Verdict
+      verdictTitle.innerText = dec.final_verdict;
+      verdictRationale.innerText = dec.rationale;
 
       if (dec.severity === "LOW") {
-        verdictBadge.className = "px-3 py-1 text-xs font-mono font-bold rounded-full bg-emerald-500/10 text-accent-emerald border border-accent-emerald/30 shadow-glow-emerald";
-        verdictBadge.innerText = "NORMAL FLOW";
-        verdictText.className = "text-2xl font-extrabold text-accent-emerald tracking-tight";
+        verdictBadge.className = "glow-badge glow-badge-emerald text-xs";
+        verdictBadge.innerHTML = `<i class="fa-solid fa-shield-check"></i> NORMAL • ALLOW`;
+        verdictAura.className = "absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl pointer-events-none transition-all duration-700 bg-emerald-500/15";
       } else if (dec.severity === "HIGH") {
-        verdictBadge.className = "px-3 py-1 text-xs font-mono font-bold rounded-full bg-rose-500/10 text-accent-ruby border border-accent-ruby/30 shadow-glow-ruby";
-        verdictBadge.innerText = "KNOWN ATTACK";
-        verdictText.className = "text-2xl font-extrabold text-accent-ruby tracking-tight";
+        verdictBadge.className = "glow-badge glow-badge-rose text-xs";
+        verdictBadge.innerHTML = `<i class="fa-solid fa-skull-crossbones"></i> KNOWN ATTACK • DROP`;
+        verdictAura.className = "absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl pointer-events-none transition-all duration-700 bg-rose-500/20";
       } else {
-        verdictBadge.className = "px-3 py-1 text-xs font-mono font-bold rounded-full bg-amber-500/10 text-accent-amber border border-accent-amber/30";
-        verdictBadge.innerText = "ZERO-DAY / ANOMALY";
-        verdictText.className = "text-2xl font-extrabold text-accent-amber tracking-tight";
+        verdictBadge.className = "glow-badge glow-badge-amber text-xs";
+        verdictBadge.innerHTML = `<i class="fa-solid fa-radiation"></i> ZERO-DAY THREAT • SOC ALERT`;
+        verdictAura.className = "absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl pointer-events-none transition-all duration-700 bg-amber-500/20";
       }
 
-      // Render SHAP
+      // 2. Stream 1 (Supervised XGBoost)
+      document.getElementById('supLabel').innerText = dec.supervised_label;
+      const confPct = (dec.supervised_confidence * 100).toFixed(1);
+      document.getElementById('supConf').innerText = `${confPct}%`;
+      document.getElementById('supProgressBar').style.width = `${confPct}%`;
+      document.getElementById('supBarLabel').innerText = `${confPct}% Confidence`;
+
+      // 3. Stream 2 (Unsupervised Autoencoder)
+      const lossVal = dec.anomaly_score > 1e6 ? dec.anomaly_score.toExponential(2) : dec.anomaly_score.toFixed(2);
+      document.getElementById('aeLoss').innerText = lossVal;
+      
+      const isAnom = dec.is_anomaly;
+      const aeStatus = document.getElementById('aeStatus');
+      const aeProgressBar = document.getElementById('aeProgressBar');
+      if (isAnom) {
+        aeStatus.innerText = "ANOMALOUS RECONSTRUCTION SPIKE";
+        aeStatus.className = "text-[10px] text-amber-400 font-mono font-bold text-right";
+        aeProgressBar.style.width = "100%";
+        aeProgressBar.className = "h-full bg-gradient-to-r from-amber-500 to-rose-500 rounded-full transition-all duration-500";
+      } else {
+        aeStatus.innerText = "NORMAL CONCORDANT PROFILE";
+        aeStatus.className = "text-[10px] text-emerald-400 font-mono text-right";
+        aeProgressBar.style.width = "25%";
+        aeProgressBar.className = "h-full bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full transition-all duration-500";
+      }
+
+      // 4. Tree SHAP Feature Attributions
       const shapBox = document.getElementById('shapContainer');
       shapBox.innerHTML = '';
-      const items = (data.shap_explanation && data.shap_explanation.top_attack_indicators) || [];
-      const negItems = (data.shap_explanation && data.shap_explanation.top_benign_indicators) || [];
-      
-      const allShap = [...items, ...negItems];
-      if (allShap.length === 0) {
-        shapBox.innerHTML = '<div class="text-xs text-gray-500 text-center py-16 font-mono">Flow exhibits baseline characteristics (no extreme outliers).</div>';
+      const baseValEl = document.getElementById('shapBaseVal');
+      baseValEl.innerText = data.shap_explanation.base_value || "0.000";
+
+      const positiveAttacks = data.shap_explanation.top_attack_indicators || [];
+      const benignMitigators = data.shap_explanation.top_benign_indicators || [];
+
+      if (positiveAttacks.length === 0 && benignMitigators.length === 0) {
+        shapBox.innerHTML = `<div class="py-4 text-center text-xs text-slate-500 font-mono">No significant feature deviance observed (Baseline concordant flow).</div>`;
       } else {
-        allShap.forEach(item => {
-          const isAttack = item.shap_value > 0;
+        // Render Attack Drivers
+        positiveAttacks.forEach(item => {
           const row = document.createElement('div');
-          row.className = "p-3 rounded-xl bg-surface-200/80 border border-surface-border text-xs font-mono flex items-center justify-between";
+          row.className = "p-2.5 rounded-lg bg-white/[0.02] border border-white/[0.06] text-xs font-mono flex items-center justify-between";
           row.innerHTML = `
-            <div class="flex-1 pr-3">
-              <div class="text-gray-200 font-semibold truncate">${item.feature}</div>
-              <div class="text-[10px] text-gray-500">Value: ${item.feature_value}</div>
+            <div>
+              <div class="text-white font-semibold flex items-center gap-1.5">
+                <i class="fa-solid fa-arrow-trend-up text-rose-400 text-[10px]"></i>
+                <span>${item.feature}</span>
+              </div>
+              <div class="text-[10px] text-slate-500">Scaled Value: ${item.feature_value}</div>
             </div>
-            <span class="${isAttack ? 'text-accent-ruby font-bold' : 'text-accent-emerald font-bold'}">
-              ${isAttack ? '+' : ''}${item.shap_value.toFixed(4)}
+            <span class="text-rose-400 font-bold px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/20 tabular-nums">
+              +${item.shap_value.toFixed(4)}
+            </span>
+          `;
+          shapBox.appendChild(row);
+        });
+
+        // Render Benign Drivers
+        benignMitigators.slice(0, 3).forEach(item => {
+          const row = document.createElement('div');
+          row.className = "p-2.5 rounded-lg bg-white/[0.02] border border-white/[0.06] text-xs font-mono flex items-center justify-between";
+          row.innerHTML = `
+            <div>
+              <div class="text-slate-300 font-semibold flex items-center gap-1.5">
+                <i class="fa-solid fa-arrow-trend-down text-emerald-400 text-[10px]"></i>
+                <span>${item.feature}</span>
+              </div>
+              <div class="text-[10px] text-slate-500">Scaled Value: ${item.feature_value}</div>
+            </div>
+            <span class="text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 tabular-nums">
+              ${item.shap_value.toFixed(4)}
             </span>
           `;
           shapBox.appendChild(row);
@@ -758,11 +1050,11 @@
       }
     }
 
+    // Batch CSV File Upload
     async function uploadCSV(input) {
       if (!input.files || !input.files[0]) return;
       const file = input.files[0];
-      const statusText = document.getElementById('uploadStatusText');
-      statusText.innerText = `Scanning ${file.name}...`;
+      showToast(`Analyzing ${file.name} in parallel...`, "info");
 
       const formData = new FormData();
       formData.append('file', file);
@@ -773,34 +1065,130 @@
           body: formData
         });
         const data = await res.json();
-        statusText.innerText = `Scanned ${file.name} (${data.total_flows_processed} flows)`;
-        alert(`Analysis Complete!\nTotal Flows: ${data.total_flows_processed}\nNormal: ${data.summary.normal_flows}\nKnown Attacks: ${data.summary.known_attacks}\nSuspicious Zero-Day: ${data.summary.suspicious_zero_day_flows}`);
+
+        // Populate summary
+        document.getElementById('batchResultsArea').classList.remove('hidden');
+        document.getElementById('batchTotal').innerText = data.total_flows_processed.toLocaleString();
+        document.getElementById('batchNormal').innerText = data.summary.normal_flows.toLocaleString();
+        document.getElementById('batchAttacks').innerText = data.summary.known_attacks.toLocaleString();
+        document.getElementById('batchZeroDay').innerText = data.summary.suspicious_zero_day_flows.toLocaleString();
+
+        // Populate table
+        const tbody = document.getElementById('batchAlertsBody');
+        tbody.innerHTML = '';
+        (data.sample_flagged_alerts || []).forEach(alert => {
+          const tr = document.createElement('tr');
+          const isHigh = alert.severity === 'HIGH';
+          tr.className = "hover:bg-white/[0.02] transition";
+          tr.innerHTML = `
+            <td class="py-3 px-4 font-bold ${isHigh ? 'text-rose-400' : 'text-amber-400'}">${alert.final_verdict}</td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${isHigh ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'}">${alert.severity}</span></td>
+            <td class="py-3 px-4 text-slate-300">${alert.sub_category}</td>
+            <td class="py-3 px-4 tabular-nums">${alert.anomaly_score.toExponential(2)}</td>
+            <td class="py-3 px-4 text-slate-400 text-[11px]">${alert.rationale}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        showToast(`Analysis Complete: ${data.total_flows_processed} flows processed!`, "success");
       } catch (err) {
-        statusText.innerText = "Error analyzing CSV file.";
-        alert("Upload error: " + err);
+        showToast("CSV processing error: " + err, "error");
       }
     }
 
-    function switchTab(tabId) {
-      ['dashboard', 'analytics', 'telemetry'].forEach(t => {
-        const btn = document.getElementById('tabBtn-' + t);
-        if (btn) {
-          if (t === tabId) {
-            btn.className = "px-3.5 py-1.5 rounded-lg text-white bg-white/10 font-semibold transition";
-          } else {
-            btn.className = "px-3.5 py-1.5 rounded-lg hover:text-white transition";
+    // Generate downloadable synthetic CSV
+    function downloadSyntheticCSV() {
+      const csvContent = "Destination Port,Flow Duration,Total Fwd Packets,Total Backward Packets,Total Length of Fwd Packets,Total Length of Bwd Packets,Fwd Packet Length Mean,Flow Bytes/s,Flow Packets/s,PSH Flag Count,Init_Win_bytes_forward\n" +
+        "443,5696503,8,7,621.0,4673.0,77.6,929.0,2.6,1,8192\n" +
+        "84,44,1,1,0.0,6.0,0.0,136363.6,45454.5,1,29200\n" +
+        "80,120000000,10000,0,5000000.0,0.0,500.0,5000000.0,2000.0,0,0\n" +
+        "443,125000,10,12,540.0,4500.0,54.0,45000.0,176.0,1,8192\n" +
+        "22,35,1,1,0.0,6.0,0.0,150000.0,50000.0,1,29200\n";
+      
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "test_traffic_flows.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast("Generated and downloaded test_traffic_flows.csv!", "success");
+    }
+
+    // Initialize Chart.js interactive charts
+    function initCharts() {
+      // 1. Model Comparison Chart
+      const ctx1 = document.getElementById('modelComparisonChart').getContext('2d');
+      new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: ['XGBoost Baseline', 'Random Forest', 'TabTransformer', 'Hybrid Decision Engine'],
+          datasets: [
+            {
+              label: 'Accuracy (%)',
+              data: [99.994, 99.988, 99.940, 99.996],
+              backgroundColor: 'rgba(6, 182, 212, 0.7)',
+              borderColor: '#06b6d4',
+              borderWidth: 1,
+              borderRadius: 6
+            },
+            {
+              label: 'Zero-Day Interception (%)',
+              data: [57.7, 56.4, 58.1, 71.1],
+              backgroundColor: 'rgba(99, 102, 241, 0.7)',
+              borderColor: '#6366f1',
+              borderWidth: 1,
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 11 } } }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+            y: { min: 40, max: 100, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } }
           }
         }
       });
-      if (tabId === 'analytics') {
-        document.getElementById('section-benchmarks').scrollIntoView({ behavior: 'smooth' });
-      }
-    }
 
-    // Auto-run benign scenario on page load
-    window.addEventListener('DOMContentLoaded', () => {
-      runScenario('benign');
-    });
+      // 2. Latency Comparison Chart
+      const ctx2 = document.getElementById('latencyComparisonChart').getContext('2d');
+      new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ['XGBoost (C++)', 'Pure NumPy GBDT', 'Random Forest', 'Deep Autoencoder', 'TabTransformer (PyTorch)'],
+          datasets: [{
+            label: 'Latency (µs / flow)',
+            data: [0.40, 0.53, 2.49, 1.88, 14.50],
+            backgroundColor: [
+              'rgba(16, 185, 129, 0.7)',
+              'rgba(6, 182, 212, 0.7)',
+              'rgba(99, 102, 241, 0.7)',
+              'rgba(139, 92, 246, 0.7)',
+              'rgba(245, 158, 11, 0.7)'
+            ],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+          }
+        }
+      });
+    }
   </script>
 </body>
 </html>
