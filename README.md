@@ -9,7 +9,7 @@
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue?logo=python&logoColor=white)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.1%2B-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![Build Status](https://img.shields.io/badge/Tests-7%20Passed%20(100%25)-brightgreen)](tests/)
+[![CI](https://github.com/yorayriniwnl/Hybrid-Intelligent-Network-Intrusion-Detection-System/actions/workflows/ci.yml/badge.svg)](https://github.com/yorayriniwnl/Hybrid-Intelligent-Network-Intrusion-Detection-System/actions/workflows/ci.yml)
 
 </div>
 
@@ -165,7 +165,7 @@ pip install -r requirements.txt
 ```bash
 python -m unittest tests/test_system.py
 ```
-> Output: `7 tests in ~2.8s: OK`
+> The integration suite is also enforced by GitHub Actions. Test counts and runtime may evolve with the project.
 
 ### 3. Launch the Cyberpunk Dashboard & REST API
 ```bash
