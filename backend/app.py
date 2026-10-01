@@ -27,7 +27,7 @@ from src.hybrid_engine import HybridDecisionEngine
 
 app = FastAPI(
     title="Hybrid Intelligent NIDS API",
-    description="Enterprise Cybersecurity Dual-Stream Intrusion Detection & Anomaly Decision Engine",
+    description="Research prototype for dual-stream intrusion classification and held-out anomaly experiments",
     version="2.0.0"
 )
 
@@ -132,46 +132,72 @@ def health_check():
 @app.get("/api/stats")
 def get_system_stats():
     ensure_models_loaded()
-    # Load evaluation metrics JSON if available
-    metrics_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "artifacts", "results", "evaluation_metrics.json"))
-    metrics_data = {}
-    if os.path.exists(metrics_path):
-        with open(metrics_path, "r", encoding="utf-8") as f:
-            metrics_data = json.load(f)
 
+    results_dir = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "artifacts", "results")
+    )
+
+    def load_json(name: str) -> Dict[str, Any]:
+        path = os.path.join(results_dir, name)
+        if not os.path.exists(path):
+            return {}
+        with open(path, "r", encoding="utf-8") as handle:
+            return json.load(handle)
+
+    evaluation = load_json("evaluation_metrics.json")
+    advanced = load_json("advanced_pipeline_results.json")
+    heldout = load_json("heldout_experiment_results.json")
+
+    models = evaluation.get("models", {})
+    rf = models.get("Random Forest", {})
+    xgb = models.get("XGBoost", {})
+    tab = advanced.get("tab_transformer_evaluation", {})
+    ae = advanced.get("autoencoder_stats", {})
+
+    def pct(value: Any) -> Optional[str]:
+        return f"{float(value) * 100:.3f}%" if isinstance(value, (int, float)) else None
+
+    def supervised_summary(record: Dict[str, Any]) -> Dict[str, Any]:
+        return {
+            "accuracy": pct(record.get("accuracy")),
+            "precision": pct(record.get("precision_macro")),
+            "recall": pct(record.get("recall_macro")),
+            "f1_score": pct(record.get("f1_score_macro")),
+            "false_positive_rate": pct(record.get("false_positive_rate")),
+            "false_negative_rate": pct(record.get("false_negative_rate")),
+            "latency_us": record.get("latency_microseconds_per_flow"),
+            "throughput_flows_sec": record.get("throughput_flows_per_sec"),
+            "test_samples": record.get("test_samples"),
+        }
+
+    dataset = evaluation.get("dataset_metadata", {})
     return {
-        "total_flows_inspected": 100000,
-        "clean_unique_flows": 86239,
-        "training_flows": 68991,
-        "test_flows_evaluated": 17248,
+        "evidence_status": "committed_experiment_artifacts",
+        "scope_note": (
+            "Supervised metrics describe held-out BENIGN/PortScan evaluation. "
+            "The DDoS result is a separate held-out-category proxy experiment, "
+            "not a guarantee of real-world zero-day detection."
+        ),
+        "total_flows_inspected": dataset.get("total_samples"),
+        "clean_unique_flows": dataset.get("cleaned_samples"),
+        "training_flows": dataset.get("train_samples"),
+        "test_flows_evaluated": dataset.get("test_samples"),
         "models": {
-            "xgboost": {
-                "accuracy": "99.994%",
-                "precision": "99.994%",
-                "recall": "99.994%",
-                "f1_score": "99.994%",
-                "latency_us": 0.40,
-                "throughput_flows_sec": "2,517,295"
-            },
-            "random_forest": {
-                "accuracy": "99.988%",
-                "precision": "99.989%",
-                "recall": "99.988%",
-                "f1_score": "99.988%",
-                "latency_us": 2.49,
-                "throughput_flows_sec": "401,042"
-            },
-            "tab_transformer": {
-                "accuracy": "99.940%",
-                "f1_score": "99.940%",
-                "architecture": "Self-Attention Transformers (2 layers, 4 heads)"
-            },
+            "xgboost": supervised_summary(xgb),
+            "random_forest": supervised_summary(rf),
+            "tab_transformer": supervised_summary(tab),
             "autoencoder": {
-                "architecture": "Symmetric Deep Bottleneck (48-24-12-24-48)",
-                "loss": "MSE Reconstruction Loss on Benign Traffic"
-            }
+                "anomaly_threshold": ae.get("anomaly_threshold"),
+                "threshold_percentile": ae.get("threshold_percentile"),
+            },
         },
-        "metrics_raw": metrics_data
+        "heldout_experiment": {
+            "attack_category": heldout.get("held_out_attack"),
+            "evaluated_samples": heldout.get("evaluated_samples"),
+            "autoencoder_detection_rate_percent": heldout.get("autoencoder_detection_rate"),
+            "supervised_forced_benign_percent": heldout.get("supervised_forced_benign_ratio"),
+            "hybrid_threat_detection_rate_percent": heldout.get("hybrid_threat_detection_rate"),
+        },
     }
 
 @app.post("/api/predict/flow")
