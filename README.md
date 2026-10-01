@@ -3,13 +3,12 @@
 ![Hybrid Intelligent NIDS Banner](artifacts/figures/banner.png)
 
 # 🛡️ Hybrid Intelligent Network Intrusion Detection System (H-NIDS)
-> **7th Semester Major Project — Full End-to-End Implementation**  
-> *A Production-Ready Hybrid Machine Learning & Deep Learning Framework for Known, Unknown, and Zero-Day Attack Detection with Explainable AI & Real-Time Cyberpunk Dashboard*
+> **7th Semester Major Project — End-to-End Research Prototype**  
+> *A hybrid machine-learning and deep-learning NIDS prototype for known-attack classification and held-out attack anomaly experiments, with explainability and an interactive SOC dashboard.*
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue?logo=python&logoColor=white)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.1%2B-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![License](https://img.shields.io/badge/License-MIT-red.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/Tests-7%20Passed%20(100%25)-brightgreen)](tests/)
 
 </div>
@@ -74,21 +73,22 @@ Traditional Network Intrusion Detection Systems (NIDS) face a fundamental flaw k
 
 ## 📊 Comprehensive Experimental Benchmark Results
 
-All models were evaluated on the **CIC-IDS2017** benchmark dataset under strict zero-data-leakage splits:
+Committed evaluation artifacts report the following results on **CIC-IDS2017**. The supervised metrics come from held-out BENIGN/PortScan splits; the DDoS experiment is a separate held-out-category simulation and must not be interpreted as proof of general real-world zero-day detection.
 
-| Architecture | Model Family | Test Accuracy | Macro F1-Score | False Alarm (FPR) | Miss Rate (FNR) | Inference Latency | Throughput | Primary Role |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
-| **Random Forest** | Supervised Trees | **99.988%** | **99.988%** | 0.0000% | 0.0230% | 2.49 µs / flow | 401,042 flows/s | Supervised Baseline |
-| **XGBoost** | Gradient Boosted Trees | **99.994%** | **99.994%** | **0.0000%** | **0.0120%** | **0.40 µs / flow** | **2,517,295 flows/s** | Ultra-Fast Line-Rate Detection |
-| **TabTransformer** | Deep Self-Attention | **99.945%** | **99.945%** | 0.0190% | 0.0900% | 177.53 µs / flow | 5,633 flows/s | Tabular Feature Attention |
-| **Deep Autoencoder** | Bottleneck Reconstruction | *Anomaly Mode* | *N/A (Unsupervised)* | 1.5000% (Thresholded) | — | 12.10 µs / flow | 82,600 flows/s | Zero-Day Outlier Detection |
-| **H-NIDS Hybrid Engine** | **Dual-Stream Fusion** | **99.994%** | **99.994%** | **0.0000%** | **0.0000%** | **3.85 µs / flow** | **260,000 flows/s** | **Full Defense-in-Depth** |
+| Architecture | Evaluation scope | Accuracy | Macro F1 | FPR | FNR | Measured latency | Measured throughput |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Random Forest** | BENIGN vs PortScan holdout (17,248 flows) | **99.988%** | **99.988%** | 0.0000% | 0.0230% | 2.51 µs / flow | 398,917 flows/s |
+| **XGBoost** | BENIGN vs PortScan holdout (17,248 flows) | **99.994%** | **99.994%** | **0.0000%** | **0.0120%** | **0.41 µs / flow** | **2,412,004 flows/s** |
+| **TabTransformer** | BENIGN vs PortScan holdout (10,833 flows) | **99.945%** | **99.945%** | 0.0190% | 0.0900% | 177.53 µs / flow | 5,633 flows/s |
+| **Deep Autoencoder + Hybrid** | Separate 1,000-flow held-out DDoS simulation | N/A | N/A | N/A | N/A | Not reported in committed held-out artifact | **71.1% hybrid threat-detection rate** |
+
+The repository does **not** currently contain a directly comparable aggregate accuracy/F1/latency benchmark for the fused hybrid engine. Those values are therefore not claimed here. Source artifacts: `artifacts/results/evaluation_metrics.json`, `advanced_pipeline_results.json`, and `heldout_experiment_results.json`.
 
 ---
 
-## 🧪 The Held-Out Attack (Zero-Day) Experiment
+## 🧪 Held-Out Attack Experiment (Zero-Day Proxy)
 
-To empirically test the system against the **Closed-World Assumption**, we conducted a simulated zero-day experiment:
+To probe the **closed-world assumption**, the project conducts a held-out-category experiment. DDoS is excluded from supervised training and then evaluated as an unseen attack category. This is a useful proxy experiment, not evidence that every novel or real-world zero-day attack will be detected.
 - The supervised models were trained **only** on `BENIGN` and `PortScan` flows.
 - A completely held-out, unseen attack category (**`DDoS`**) was passed into both systems without retraining.
 
@@ -99,7 +99,17 @@ To empirically test the system against the **Closed-World Assumption**, we condu
    - **57.7%** were forcibly misclassified as `PortScan`.
 2. **H-NIDS Hybrid Fusion Success:**
    - The Deep Autoencoder flagged an average reconstruction error spike of **$4.09 \times 10^{13}$**, surpassing the 98.5th percentile statistical threshold.
-   - The Hybrid Decision Engine intercepted **71.1% of the novel attack traffic** as **`Suspicious / Held-Out Zero-Day Attack`**, immediately alerting security operators.
+   - The Hybrid Decision Engine flagged **71.1% of the 1,000 held-out DDoS sample flows** as a threat in the committed experiment.
+
+---
+
+## 🔎 Evidence Boundary
+
+- The headline supervised metrics are read from committed JSON result artifacts, not recomputed on every web request.
+- The held-out DDoS result is a **simulation on one excluded CIC-IDS2017 category**. It is not a guarantee of real-world zero-day detection.
+- Latency and throughput are machine/run dependent and should be interpreted only in the context of the recorded experiment.
+- The repository is a research/academic prototype. Production SOC deployment, continuous packet capture, adversarial robustness, calibration across networks, and operational incident-response validation are outside the currently demonstrated scope.
+- No software license is asserted in this README until a root license file is deliberately chosen and added.
 
 ---
 
@@ -129,9 +139,9 @@ Exact Tree SHAP game-theoretic Shapley values calculated across unseen flows rev
 
 The project includes an interactive, high-contrast **Cyberpunk Dark/Red Theme** web console:
 
-- **Live Telemetry & KPI HUD:** Displays verified F1-scores, dual-stream throughput, and active anomaly thresholds.
+- **Telemetry & KPI HUD:** Displays metrics from committed experiment artifacts and the active anomaly threshold.
 - **One-Click Attack Simulator:** Test pre-configured simulation scenarios (`Normal HTTPS Browsing`, `Aggressive PortScan Probe`, `Novel DDoS Volumetric Flood`) with real-time verdicts.
-- **Live SHAP Attribution Visualizer:** Explains each individual flow decision with color-coded positive (attack) and negative (benign) contribution bars.
+- **Per-flow attribution visualizer:** Uses the deployed XGBoost contribution engine for individual-flow feature attributions.
 - **Batch CSV Drag & Drop Upload:** Drop any raw CIC-IDS2017 or firewall capture CSV file to run automated batch triage and download threat intelligence summaries.
 
 ---
@@ -183,7 +193,7 @@ Access the web dashboard at `http://localhost:8000` or inspect API docs at `http
 
 ## ☁️ Vercel Serverless Deployment
 
-Deploy the entire H-NIDS dashboard and Dual-Stream decision API onto Vercel with zero server maintenance, global edge CDN caching, and serverless auto-scaling:
+The repository includes a lightweight Vercel deployment path for the dashboard and NumPy/JSON inference runtime. Treat it as a demonstration deployment; the full local training stack is not executed on Vercel.
 
 ### Method A: One-Click Git Deployment (Recommended)
 1. Push this repository to GitHub:
@@ -195,7 +205,7 @@ Deploy the entire H-NIDS dashboard and Dual-Stream decision API onto Vercel with
 4. Leave build settings as default (Framework Preset: **Other**) and click **Deploy**.
 5. Vercel automatically:
    - Deploys static dashboard assets in `/public` to the global edge CDN.
-   - Deploys `/api/index.py` as an ultra-fast Python Serverless Function (<100ms response time).
+   - Deploys `/api/index.py` as a Python serverless function; latency depends on platform/runtime conditions.
    - Ingests lightweight serialized models (`autoencoder_weights.npz`, `xgboost_model.joblib`, `preprocessor.joblib`).
 
 ### Method B: Vercel CLI Deployment
