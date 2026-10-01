@@ -72,7 +72,7 @@ class HeldOutAttackExperiment:
         print(f"    - Supervised Model Result (Closed-World Assumption):")
         print(f"      * Forced to label DDoS as 'BENIGN':   {sup_benign_count} flows ({sup_benign_count/len(sample_ddos)*100:.1f}%)")
         print(f"      * Forced to label DDoS as 'PortScan': {sup_portscan_count} flows ({sup_portscan_count/len(sample_ddos)*100:.1f}%)")
-        print(f"      -> Proves supervised models cannot identify novel attacks on their own!")
+        print(f"      -> Demonstrates the closed-world limitation for this held-out experiment.")
         print(f"\n    - Unsupervised Autoencoder Result:")
         print(f"      * Average DDoS Reconstruction Error:  {avg_recon_error:.5f} (Normal Threshold = {threshold:.5f})")
         print(f"      * Successfully Flagged as Anomaly:    {flagged_count} / {len(sample_ddos)} flows ({detection_rate:.2f}%)")
@@ -87,6 +87,6 @@ class HeldOutAttackExperiment:
             "autoencoder_detection_rate": round(detection_rate, 2),
             "supervised_forced_benign_ratio": round(sup_benign_count / len(sample_ddos) * 100, 2),
             "hybrid_threat_detection_rate": round((flagged_as_attack + flagged_as_suspicious) / len(sample_ddos) * 100, 2),
-            "research_conclusion": "Confirms that combining supervised classification with Autoencoder anomaly detection successfully intercepts held-out attacks that supervised models fail to identify."
+            "research_conclusion": "In this held-out DDoS experiment, the hybrid system flagged more threat flows than the supervised classifier alone; this result does not establish general zero-day performance."
         }
         return results
