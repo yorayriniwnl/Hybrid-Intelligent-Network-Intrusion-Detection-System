@@ -267,11 +267,11 @@ When presenting to the evaluation committee:
 
 > *"Good morning/afternoon, professors. In this project, we address the critical challenge of the Closed-World Assumption in Network Intrusion Detection Systems.*
 >
-> *While conventional supervised models like Random Forest and XGBoost achieve over 99.99% accuracy on known signatures at 2.5 million flows per second, our held-out experiments demonstrate that they fail catastrophically when confronted with novel attacks—misclassifying 42.3% of zero-day DDoS traffic as completely benign.*
+> *In our committed BENIGN-versus-PortScan holdout, Random Forest and XGBoost exceed 99.99% supervised accuracy. In a separate proxy experiment where DDoS is withheld from supervised training, 42.3% of those held-out DDoS flows are classified as BENIGN. This illustrates the closed-world limitation in this experiment; it does not establish performance on arbitrary real-world zero-day attacks.*
 >
-> *To solve this, our proposed architecture implements a Dual-Stream Hybrid Fusion Framework. Alongside supervised TabTransformer and XGBoost classifiers, we deploy a Deep Autoencoder trained exclusively on benign traffic profiles. The Autoencoder measures reconstruction error spikes to flag anomalous, out-of-distribution flows. Our Hybrid Decision Engine fuses these streams to accurately intercept 71.1% of zero-day attacks without requiring any retraining.*
+> *Our proposed Dual-Stream Hybrid Fusion Framework combines supervised TabTransformer/XGBoost outputs with a Deep Autoencoder trained on benign traffic. In the committed 1,000-flow held-out DDoS proxy experiment, the hybrid decision engine flags 71.1% of those flows as threats without retraining. That result is specific to this dataset and held-out category, not a claim of general zero-day detection.*
 >
-> *Finally, we incorporate Explainable AI using game-theoretic Tree SHAP to provide network security analysts with real-time feature attributions, all packaged into a responsive Cyberpunk-themed SOC dashboard with sub-millisecond REST endpoints."*
+> *Finally, we use Tree SHAP for feature attribution and expose the experimental pipeline through a responsive SOC-style dashboard and REST API. Reported latency and throughput values belong to the recorded benchmark runs and should not be generalized to every deployment environment."*
 
 ---
 
