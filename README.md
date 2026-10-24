@@ -1,6 +1,14 @@
+<!-- YOR REDLINE / README COVER V1 -->
 <div align="center">
 
-![Hybrid Intelligent NIDS Banner](artifacts/figures/banner.png)
+![Hybrid-Intelligent-Network-Intrusion-Detection-System | YOR REDLINE](docs/yor-redline-cover.svg)
+
+<sub><strong>YOR / PROJECT DOSSIER</strong> · <a href="https://github.com/yorayriniwnl">GitHub</a> · <a href="https://yorayriniwnl.in">Portfolio</a></sub>
+
+</div>
+<!-- END YOR REDLINE -->
+
+<div align="center">
 
 # 🛡️ Hybrid Intelligent Network Intrusion Detection System (H-NIDS)
 > **7th Semester Major Project — End-to-End Research Prototype**  
