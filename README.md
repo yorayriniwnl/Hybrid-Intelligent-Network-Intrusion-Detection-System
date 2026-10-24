@@ -23,6 +23,23 @@
 
 ---
 
+<!-- YOR REDLINE / EXPERIENCE V2 -->
+
+<a id="system-map"></a>
+## System map
+
+<div align="center"><picture><source media="(max-width: 600px)" srcset="docs/yor-redline-system-mobile.svg"/><img src="docs/yor-redline-system.svg" width="100%" alt="Hybrid network defense research: Prepare network data to Run model baselines to Inspect explanation to Review SOC signals"/></picture></div>
+
+| Project signal | Documented scope |
+| :--- | :--- |
+| **Current maturity** | ACADEMIC PROTOTYPE |
+| **Technical focus** | Known-attack classification, held-out anomaly experiments, SHAP, and an interactive SOC dashboard. |
+| **Evidence boundary** | Held-out attack evaluation is a proxy experiment, not a field-validated zero-day detector. |
+
+**Navigate:** [📌 Executive Summary & Academic Objectives](#executive-summary--academic-objectives) · [🏗️ System Architecture](#system-architecture) · [📊 Comprehensive Experimental Benchmark Results](#comprehensive-experimental-benchmark-results) · [🧪 Held-Out Attack Experiment (Zero-Day Proxy)](#held-out-attack-experiment-zero-day-proxy) · [🔎 Evidence Boundary](#evidence-boundary) · [🔬 Visualizations & Explainable AI (SHAP)](#visualizations--explainable-ai-shap) · [🖥️ Cyberpunk SOC Monitoring Dashboard (Phase 4)](#cyberpunk-soc-monitoring-dashboard-phase-4)
+
+<!-- END YOR REDLINE / EXPERIENCE V2 -->
+
 ## 📌 Executive Summary & Academic Objectives
 
 Traditional Network Intrusion Detection Systems (NIDS) face a fundamental flaw known as the **Closed-World Assumption**: supervised classifiers (Random Forest, XGBoost, TabTransformer) can accurately detect known attack signatures, but they catastrophically misclassify novel, held-out, or zero-day attacks as normal traffic or coerce them into erroneous categories.
