@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  hnids-service:
+  falsequiet-service:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: hnids_enterprise_engine
+    container_name: falsequiet_engine
     restart: unless-stopped
     ports:
       - "8000:8000"

@@ -1,5 +1,5 @@
 """
-Explainable AI (XAI) Module for Hybrid Intelligent Network Intrusion Detection System
+Explainable AI (XAI) Module for FalseQuiet
 FR6: SHAP Feature Attributions, Local Explanations, and Global Importance Visualizations
 """
 

@@ -1,5 +1,5 @@
 """
-TabTransformer Module for Hybrid Intelligent Network Intrusion Detection System
+TabTransformer Module for FalseQuiet
 Phase 2: Attention-Based Deep Learning for Tabular Network Flows
 """
 

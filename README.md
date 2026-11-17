@@ -1,7 +1,7 @@
 <!-- YOR REDLINE / README COVER V1 -->
 <div align="center">
 
-<picture><source media="(max-width: 600px)" srcset="docs/yor-redline-cover-mobile.svg"/><img src="docs/yor-redline-cover.svg" width="100%" alt="Hybrid-Intelligent-Network-Intrusion-Detection-System | YOR REDLINE"/></picture>
+<picture><source media="(max-width: 600px)" srcset="docs/yor-redline-cover-mobile.svg"/><img src="docs/yor-redline-cover.svg" width="100%" alt="FalseQuiet | YOR REDLINE"/></picture>
 
 <sub><strong>YOR / PROJECT DOSSIER</strong> · <a href="https://github.com/yorayriniwnl">GitHub</a> · <a href="https://yorayriniwnl.in">Portfolio</a></sub>
 
@@ -10,14 +10,14 @@
 
 <div align="center">
 
-# 🛡️ Hybrid Intelligent Network Intrusion Detection System (H-NIDS)
+# 🛡️ FalseQuiet (Hybrid Intelligent Network Intrusion Detection System)
 > **7th Semester Major Project — End-to-End Research Prototype**  
 > *A hybrid machine-learning and deep-learning NIDS prototype for known-attack classification and held-out attack anomaly experiments, with explainability and an interactive SOC dashboard.*
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue?logo=python&logoColor=white)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.1%2B-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![CI](https://github.com/yorayriniwnl/Hybrid-Intelligent-Network-Intrusion-Detection-System/actions/workflows/ci.yml/badge.svg)](https://github.com/yorayriniwnl/Hybrid-Intelligent-Network-Intrusion-Detection-System/actions/workflows/ci.yml)
+[![CI](https://github.com/yorayriniwnl/FalseQuiet/actions/workflows/ci.yml/badge.svg)](https://github.com/yorayriniwnl/FalseQuiet/actions/workflows/ci.yml)
 
 </div>
 
@@ -44,7 +44,7 @@
 
 Traditional Network Intrusion Detection Systems (NIDS) face a fundamental flaw known as the **Closed-World Assumption**: supervised classifiers (Random Forest, XGBoost, TabTransformer) can accurately detect known attack signatures, but they catastrophically misclassify novel, held-out, or zero-day attacks as normal traffic or coerce them into erroneous categories.
 
-**H-NIDS** resolves this limitation by introducing a **Dual-Stream Hybrid Fusion Architecture**:
+**FalseQuiet** resolves this limitation by introducing a **Dual-Stream Hybrid Fusion Architecture**:
 1. **Supervised Stream (XGBoost & TabTransformer):** Contextual multi-head self-attention and gradient boosting for microsecond classification of known network attack vectors.
 2. **Unsupervised Anomaly Stream (Deep Autoencoder):** Symmetric bottleneck neural network trained exclusively on benign traffic baselines; detects deviations via statistical reconstruction error ($L_2$ error thresholding).
 3. **Hybrid Decision Fusion Engine:** Reconciles supervised probabilities and autoencoder anomaly scores to output 3 unambiguous operational states: **`Normal`**, **`Known Attack`**, or **`Suspicious / Held-Out Zero-Day Attack`**.
@@ -122,7 +122,7 @@ To probe the **closed-world assumption**, the project conducts a held-out-catego
    - XGBoost and Random Forest completely failed to detect the novel nature of the attack:
    - **42.3%** of DDoS attack flows were misclassified as **`BENIGN`** (silent security breach).
    - **57.7%** were forcibly misclassified as `PortScan`.
-2. **H-NIDS Hybrid Fusion Success:**
+2. **FalseQuiet Hybrid Fusion Success:**
    - The Deep Autoencoder flagged an average reconstruction error spike of **$4.09 \times 10^{13}$**, surpassing the 98.5th percentile statistical threshold.
    - The Hybrid Decision Engine flagged **71.1% of the 1,000 held-out DDoS sample flows** as a threat in the committed experiment.
 
@@ -175,8 +175,8 @@ The project includes an interactive, high-contrast **Cyberpunk Dark/Red Theme** 
 
 ### 1. Clone & Set Up Local Environment
 ```bash
-git clone https://github.com/yorayriniwnl/Hybrid-Intelligent-Network-Intrusion-Detection-System.git
-cd Hybrid-Intelligent-Network-Intrusion-Detection-System
+git clone https://github.com/yorayriniwnl/FalseQuiet.git
+cd FalseQuiet
 
 # Create virtual environment
 python -m venv .venv
@@ -209,8 +209,8 @@ Deploy the entire system with zero host dependencies using Docker or Docker Comp
 docker compose up --build -d
 
 # Or build standalone Docker container
-docker build -t hnids-system .
-docker run -p 8000:8000 hnids-system
+docker build -t falsequiet .
+docker run -p 8000:8000 falsequiet
 ```
 Access the web dashboard at `http://localhost:8000` or inspect API docs at `http://localhost:8000/docs`.
 
@@ -226,7 +226,7 @@ The repository includes a lightweight Vercel deployment path for the dashboard a
    git push origin main
    ```
 2. Go to **[vercel.com/new](https://vercel.com/new)** and sign in.
-3. Import the `Hybrid-Intelligent-Network-Intrusion-Detection-System` repository.
+3. Import the `FalseQuiet` repository.
 4. Leave build settings as default (Framework Preset: **Other**) and click **Deploy**.
 5. Vercel automatically:
    - Deploys static dashboard assets in `/public` to the global edge CDN.
@@ -247,7 +247,7 @@ npx vercel --prod
 ## 📁 Repository Directory Structure
 
 ```
-Hybrid-Intelligent-Network-Intrusion-Detection-System/
+FalseQuiet/
 ├── api/
 │   └── index.py                  # Vercel Serverless Function entry point
 ├── public/

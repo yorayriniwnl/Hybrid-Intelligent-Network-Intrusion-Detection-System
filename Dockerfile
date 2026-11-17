@@ -1,4 +1,4 @@
-# Multi-stage production container for Hybrid Intelligent NIDS
+# Multi-stage production container for FalseQuiet
 FROM python:3.11-slim
 
 # Set environment variables

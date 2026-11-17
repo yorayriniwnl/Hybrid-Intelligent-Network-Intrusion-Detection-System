@@ -1,5 +1,5 @@
 """
-Vercel Serverless Function Entry Point for Hybrid Intelligent NIDS
+Vercel Serverless Function Entry Point for FalseQuiet
 Exposes FastAPI app for serverless execution on Vercel
 """
 import os

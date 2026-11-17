@@ -39,10 +39,10 @@ class TestEvidenceContract(unittest.TestCase):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         hybrid_rows = [
             line for line in readme.splitlines()
-            if line.startswith("| **H-NIDS Hybrid Engine**")
+            if line.startswith("| **FalseQuiet Hybrid Engine**")
         ]
         self.assertEqual(hybrid_rows, [])
-        self.assertNotRegex(readme, re.compile(r"H-NIDS Hybrid Engine.*99\.994%", re.I))
+        self.assertNotRegex(readme, re.compile(r"FalseQuiet Hybrid Engine.*99\.994%", re.I))
 
     def test_readme_does_not_advertise_missing_license(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

@@ -1,5 +1,5 @@
 """
-Visualization Module for Hybrid Intelligent Network Intrusion Detection System
+Visualization Module for FalseQuiet
 Plots Attack Distribution, Confusion Matrices, and Model Comparison
 """
 

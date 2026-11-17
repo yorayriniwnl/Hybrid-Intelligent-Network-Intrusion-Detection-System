@@ -1,5 +1,5 @@
 """
-Evaluation Module for Hybrid Intelligent Network Intrusion Detection System
+Evaluation Module for FalseQuiet
 Reports genuine test metrics: Precision, Recall, F1, Accuracy, Confusion Matrix, FPR, FNR, and Inference Latency
 """
 

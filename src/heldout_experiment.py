@@ -1,5 +1,5 @@
 """
-Held-Out Attack Experiment Module for Hybrid Intelligent Network Intrusion Detection System
+Held-Out Attack Experiment Module for FalseQuiet
 Evaluates detection of excluded attack categories (DDoS) using unsupervised anomaly detection
 """
 

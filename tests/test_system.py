@@ -1,5 +1,5 @@
 """
-System-wide integration and unit tests for the Hybrid Intelligent NIDS (H-NIDS).
+System-wide integration and unit tests for the FalseQuiet.
 Validates:
 1. Model loading & inference (RF, XGBoost, TabTransformer, Deep Autoencoder).
 2. Hybrid Decision Fusion logic (Normal, Known Attack, Suspicious/Held-out).
@@ -23,7 +23,7 @@ from src.explainable_ai import NetworkExplainableAI
 from src.hybrid_engine import HybridDecisionEngine
 
 
-class TestHNIDSSystem(unittest.TestCase):
+class TestFalseQuietSystem(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Initialize models and test client."""

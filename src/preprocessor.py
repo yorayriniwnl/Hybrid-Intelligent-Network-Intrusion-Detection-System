@@ -1,5 +1,5 @@
 """
-Data Preprocessing Module for Hybrid Intelligent Network Intrusion Detection System
+Data Preprocessing Module for FalseQuiet
 FR2: Cleaning, Outlier/Inf/Null Handling, Train/Test Split Without Leakage, Scaling
 """
 

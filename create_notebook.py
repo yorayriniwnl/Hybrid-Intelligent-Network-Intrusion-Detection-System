@@ -6,7 +6,7 @@ notebook = {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# Hybrid Intelligent Network Intrusion Detection System (H-NIDS)\n",
+    "# FalseQuiet (Hybrid Intelligent Network Intrusion Detection System)\n",
     "## Phase 1 Working ML Prototype — Faculty Evaluation Benchmark\n",
     "\n",
     "> **Academic Stage:** 7th Semester Major Project  \n",

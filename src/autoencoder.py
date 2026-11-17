@@ -1,5 +1,5 @@
 """
-Autoencoder Anomaly Detection Module for Hybrid Intelligent Network Intrusion Detection System
+Autoencoder Anomaly Detection Module for FalseQuiet
 FR4: Normal-traffic reconstruction, statistical anomaly threshold selection, and out-of-distribution detection
 """
 

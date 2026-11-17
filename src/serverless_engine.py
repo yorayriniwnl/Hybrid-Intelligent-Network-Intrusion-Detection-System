@@ -1,5 +1,5 @@
 """
-Serverless Inference Engine for Hybrid Intelligent NIDS
+Serverless Inference Engine for FalseQuiet
 Ultra-lean, zero-C++ pure NumPy/Python inference for Preprocessor and XGBoost.
 Eliminates heavy CUDA, PyTorch, SciPy, and Pandas packages in serverless runtimes.
 """

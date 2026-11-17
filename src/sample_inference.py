@@ -1,5 +1,5 @@
 """
-Sample Inference Module for Hybrid Intelligent Network Intrusion Detection System
+Sample Inference Module for FalseQuiet
 Passes unseen test network flows through trained models and displays granular predictions
 """
 

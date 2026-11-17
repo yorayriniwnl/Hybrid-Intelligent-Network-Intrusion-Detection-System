@@ -1,5 +1,5 @@
 """
-Data Loader Module for Hybrid Intelligent Network Intrusion Detection System
+Data Loader Module for FalseQuiet
 Academic Phase 1 Prototype: Dataset Loading and Inspection
 """
 

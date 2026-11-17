@@ -1,5 +1,5 @@
 """
-ML Models Module for Hybrid Intelligent Network Intrusion Detection System
+ML Models Module for FalseQuiet
 FR3: Random Forest Baseline & XGBoost Advanced Supervised Classifier
 """
 

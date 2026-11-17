@@ -1,5 +1,5 @@
 """
-End-to-End Pipeline Runner for Hybrid Intelligent Network Intrusion Detection System
+End-to-End Pipeline Runner for FalseQuiet
 Next-Week Faculty Evaluation Prototype Execution Script
 """
 
@@ -27,7 +27,7 @@ def run_evaluation_prototype(
     random_state: int = 42
 ):
     print("=" * 90)
-    print(" HYBRID INTELLIGENT NETWORK INTRUSION DETECTION SYSTEM (H-NIDS)")
+    print(" FALSEQUIET (HYBRID INTELLIGENT NETWORK INTRUSION DETECTION SYSTEM)")
     print(" PHASE 1 EVALUATION-READY ML PROTOTYPE — ACADEMIC FACULTY BENCHMARK")
     print("=" * 90)
 
@@ -268,7 +268,7 @@ def run_evaluation_prototype(
     return metrics_summary, comparison_table
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run H-NIDS Phase 1 Prototype Pipeline")
+    parser = argparse.ArgumentParser(description="Run FalseQuiet Phase 1 Prototype Pipeline")
     parser.add_argument("--dataset", type=str, default="data/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv")
     parser.add_argument("--sample_size", type=int, default=100000)
     parser.add_argument("--test_size", type=float, default=0.20)

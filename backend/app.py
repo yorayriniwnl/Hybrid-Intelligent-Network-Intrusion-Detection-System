@@ -1,5 +1,5 @@
 """
-FastAPI Backend Application for Hybrid Intelligent Network Intrusion Detection System (H-NIDS)
+FastAPI Backend Application for FalseQuiet (Hybrid Intelligent Network Intrusion Detection System)
 Phase 4: REST API, Live Dual-Stream Inference, CSV Batch Upload, and Dashboard Backend
 Optimized for high-performance serverless deployment on Vercel (<60MB runtime footprint).
 """
@@ -26,7 +26,7 @@ from src.autoencoder import NumpyAutoencoder
 from src.hybrid_engine import HybridDecisionEngine
 
 app = FastAPI(
-    title="Hybrid Intelligent NIDS API",
+    title="FalseQuiet API",
     description="Research prototype for dual-stream intrusion classification and held-out anomaly experiments",
     version="2.0.0"
 )
@@ -46,7 +46,7 @@ MODELS: Dict[str, Any] = {}
 def load_all_models():
     if MODELS:
         return
-    print("[*] Initializing H-NIDS API: Loading models and preprocessor artifacts...")
+    print("[*] Initializing FalseQuiet API: Loading models and preprocessor artifacts...")
     models_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "artifacts", "models"))
     
     # 1. Preprocessor (Pure NumPy/JSON)
@@ -101,7 +101,7 @@ def load_all_models():
     if "xgboost" in MODELS:
         MODELS["xai"] = MODELS["xgboost"]
 
-    print(f"[+] H-NIDS API Ready! Loaded components: {list(MODELS.keys())}")
+    print(f"[+] FalseQuiet API Ready! Loaded components: {list(MODELS.keys())}")
 
 def ensure_models_loaded():
     if not MODELS:
@@ -123,7 +123,7 @@ def health_check():
     ensure_models_loaded()
     return {
         "status": "online",
-        "system": "Hybrid Intelligent NIDS",
+        "system": "FalseQuiet",
         "loaded_modules": list(MODELS.keys()),
         "classes": MODELS["preprocessor"].classes_ if "preprocessor" in MODELS else [],
         "anomaly_threshold": MODELS["autoencoder"].anomaly_threshold if "autoencoder" in MODELS else None
@@ -331,7 +331,7 @@ def serve_dashboard():
         if os.path.exists(fpath):
             with open(fpath, "r", encoding="utf-8") as f:
                 return f.read()
-    return "<h1>H-NIDS API is Running.</h1>"
+    return "<h1>FalseQuiet API is Running.</h1>"
 
 if __name__ == "__main__":
     import uvicorn

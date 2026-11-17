@@ -23,7 +23,7 @@ from src.evaluate import ModelEvaluator
 
 def run_advanced_ai_pipeline():
     print("=" * 90)
-    print(" HYBRID INTELLIGENT NIDS — PHASES 2 & 3 ADVANCED AI & EXPLAINABILITY ENGINE")
+    print(" FALSEQUIET — PHASES 2 & 3 ADVANCED AI & EXPLAINABILITY ENGINE")
     print("=" * 90)
 
     models_dir = "artifacts/models"
