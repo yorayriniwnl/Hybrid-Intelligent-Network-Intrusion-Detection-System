@@ -5,11 +5,5 @@
       "maxDuration": 15,
       "includeFiles": "artifacts/models/*.json,artifacts/models/*.npz,artifacts/results/*.json"
     }
-  },
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/index.py"
-    }
-  ]
+  }
 }
