@@ -3,6 +3,9 @@ Autoencoder Anomaly Detection Module for FalseQuiet
 FR4: Normal-traffic reconstruction, statistical anomaly threshold selection, and out-of-distribution detection
 """
 
+# Keeps torch type hints unevaluated so this module imports in the torch-free serverless runtime.
+from __future__ import annotations
+
 import time
 import os
 import numpy as np
@@ -16,7 +19,11 @@ try:
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
-    nn = object  # dummy fallback
+
+    class nn:  # noqa: N801 - stands in for torch.nn so torch-only classes can still be defined
+        """Serverless fallback: lets `class X(nn.Module)` import without torch. Only NumpyAutoencoder works here."""
+
+        Module = object
 
 class NumpyAutoencoder:
     """
